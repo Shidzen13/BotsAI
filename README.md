@@ -3,6 +3,10 @@
 AI bots for ROUNDS — play solo in the LOCAL lobby or online with friends through RoundsWithFriends.
 Thunderstore: https://thunderstore.io/c/rounds/p/Shidzenreku13/BotsAI/
 
+![Online lobby with bots](docs/images/lobby.png)
+
+![Bots in a match](docs/images/battle.png)
+
 See [dist/pkg/README.md](dist/pkg/README.md) for controls, settings and compatibility.
 
 ## Layout

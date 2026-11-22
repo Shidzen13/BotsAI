@@ -1,6 +1,10 @@
 # BotsAI
 
-AI bots for ROUNDS. Author: Shidzenreku13.
+AI bots for ROUNDS. Author: Shidzenreku13. Source: https://github.com/Shidzen13/BotsAI
+
+![Online lobby with bots](https://raw.githubusercontent.com/Shidzen13/BotsAI/main/docs/images/lobby.png)
+
+![Bots in a match](https://raw.githubusercontent.com/Shidzen13/BotsAI/main/docs/images/battle.png)
 
 ## Controls
 - **LOCAL lobby:** `B` - add a bot.
