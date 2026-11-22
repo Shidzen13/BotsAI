@@ -187,7 +187,21 @@ namespace RoundsBots.Patches
                 + CardKnowledge.OriginAdjustment(CardOrigin.Parse(card.name), name)
                 + CardScoring.BalanceAdjustment(CardScoring.RoleOf(features), owned)
                 + CardKnowledge.DuplicateAdjustment(name, OwnedCopies(pickers, name))
-                + CardSynergy.Adjustment(name, OwnedCardNames(pickers));
+                + CardSynergy.Adjustment(name, OwnedCardNames(pickers))
+                + (CardSynergy.IsNotForBots(CategoryNames(card.GetComponent<CardInfo>())) ? CardSynergy.ForbiddenPenalty : 0f);
+        }
+
+        /// <summary>Назви категорій картки (і звичайних, і «blacklisted» — RoundsWithBots ставить NotForBots туди).</summary>
+        private static IEnumerable<string> CategoryNames(CardInfo info)
+        {
+            if (info == null)
+            {
+                return Enumerable.Empty<string>();
+            }
+
+            return (info.categories ?? new CardCategory[0]).Concat(info.blacklistedCategories ?? new CardCategory[0])
+                .Where(c => c != null)
+                .Select(c => c.name);
         }
 
         private static IEnumerable<string> OwnedCardNames(Player[] pickers)

@@ -83,6 +83,15 @@ namespace RoundsBots.Logic
             return Forbidden.Any(pair => (candidate == pair.A && owned.Contains(pair.B)) || (candidate == pair.B && owned.Contains(pair.A)));
         }
 
+        /// <summary>Назва категорії, якою автори модів прибирають картку від ботів (конвенція RoundsWithBots).</summary>
+        public const string NotForBotsCategory = "NotForBots";
+
+        /// <summary>Картка позначена «не для ботів» — серед категорій є <see cref="NotForBotsCategory"/>.</summary>
+        public static bool IsNotForBots(IEnumerable<string> categoryNames)
+        {
+            return categoryNames != null && categoryNames.Any(n => string.Equals(n?.Trim(), NotForBotsCategory, StringComparison.OrdinalIgnoreCase));
+        }
+
         private static string Normalize(string name) => name.Trim().ToUpperInvariant();
     }
 }

@@ -13,6 +13,8 @@ namespace RoundsBots
         private const float MinBulletSpeed = 5f;
         private const int TrajectorySamples = 14;
         private const float MaxFlightTime = 3f;
+        private const float DragSearchDegrees = 45f;
+        private const float DragAimTolerance = 0.5f;
         private const float BankSearchInterval = 0.25f;
         private const int BankSamples = 36;
         private const float BankMaxTime = 1f;
@@ -33,6 +35,11 @@ namespace RoundsBots
         private float trackedTime;
         private Vector2 targetVelocity;
         private Vector2 bulletBoost;
+        private float bulletDrag;
+        private float bulletDragMinSpeed = 1f;
+        private float bulletSimulationSpeed = 1f;
+
+        private bool UsesDragSim => BulletSim.Needed(bulletDrag, bulletSimulationSpeed);
 
         public BotAiming(CharacterData data)
         {
@@ -108,7 +115,9 @@ namespace RoundsBots
         /// <summary>Чи чиста траєкторія для вже повернутого (з розкидом) напрямку — на ту саму відстань до цілі.</summary>
         private bool IsDirectionClear(Vector2 from, Vector2 direction, Vector2 targetPosition, float speed, float gravity)
         {
-            float flightTime = Mathf.Min(BotMath.FlightTime(targetPosition.x - from.x, direction.x, speed), MaxFlightTime);
+            float flightTime = UsesDragSim
+                ? BulletSim.ClosestApproach(SimPath(direction, speed, gravity), targetPosition.x - from.x, targetPosition.y - from.y).time
+                : Mathf.Min(BotMath.FlightTime(targetPosition.x - from.x, direction.x, speed), MaxFlightTime);
             return IsTrajectoryClear(from, direction, speed, gravity, flightTime);
         }
 
@@ -238,6 +247,22 @@ namespace RoundsBots
                 predicted = targetPosition + (targetVelocity - bulletBoost) * flightTime;
             }
 
+            if (UsesDragSim)
+            {
+                // Опір повітря: парабола мажe — уточнюємо кут чисельною симуляцією навколо аналітичного.
+                Vector2 delta = predicted - from;
+                float baseAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                if (!BulletSim.TryAim(delta.x, delta.y, speed, gravity, bulletDrag, bulletDragMinSpeed, bulletSimulationSpeed,
+                        bulletBoost.x, bulletBoost.y, baseAngle, DragSearchDegrees, MaxFlightTime, DragAimTolerance,
+                        out float sx, out float sy, out float simTime))
+                {
+                    return false;
+                }
+
+                direction = new Vector2(sx, sy);
+                flightTime = simTime;
+            }
+
             return true;
         }
 
@@ -273,12 +298,12 @@ namespace RoundsBots
             LayerMask mask = PlayerManager.instance.canSeePlayerMask;
             float drill = DrillMeters();
             float walls = 0f;
+            var path = UsesDragSim ? SimPath(direction, speed, gravity) : null;
             Vector2 previous = from;
             for (int i = 1; i <= TrajectorySamples; i++)
             {
                 float t = flightTime * i / TrajectorySamples;
-                (float x, float y) = BotMath.BulletPosition(direction.x, direction.y, speed, gravity, t);
-                Vector2 point = from + new Vector2(x, y) + bulletBoost * t;
+                Vector2 point = from + Offset(path, direction, speed, gravity, t);
                 if (IsBlocked(previous, point, mask))
                 {
                     // Drill Ammo: куля пробиває стіни — рахуємо їх сумарну товщину.
@@ -293,6 +318,25 @@ namespace RoundsBots
             }
 
             return true;
+        }
+
+        private System.Collections.Generic.List<(float t, float x, float y)> SimPath(Vector2 direction, float speed, float gravity)
+        {
+            return BulletSim.Path(direction.x, direction.y, speed, gravity, bulletDrag, bulletDragMinSpeed, bulletSimulationSpeed,
+                bulletBoost.x, bulletBoost.y, MaxFlightTime);
+        }
+
+        /// <summary>Зсув кулі від точки пострілу через t с: з симуляції (якщо є drag) або параболою.</summary>
+        private Vector2 Offset(System.Collections.Generic.List<(float t, float x, float y)> path, Vector2 direction, float speed, float gravity, float t)
+        {
+            if (path != null && path.Count > 0)
+            {
+                int index = Mathf.Clamp(Mathf.RoundToInt(t / BulletSim.Step) - 1, 0, path.Count - 1);
+                return new Vector2(path[index].x, path[index].y);
+            }
+
+            (float x, float y) = BotMath.BulletPosition(direction.x, direction.y, speed, gravity, t);
+            return new Vector2(x, y) + bulletBoost * t;
         }
 
         private int drillCacheCount = -1;
@@ -403,6 +447,16 @@ namespace RoundsBots
                 gravity = bullet.gravity * gun.gravity;
                 // Виміряно в грі: до швидкості кулі додається worldForce (зазвичай (0, 5)), теж множиться на gun.gravity.
                 bulletBoost = (Vector2)bullet.worldForce * gun.gravity;
+                // Як Gun.FireBurst: drag кулі = gun.drag (0..45), dragMinSpeed, simulationSpeed *= projectielSimulatonSpeed.
+                bulletDrag = Mathf.Clamp(gun.drag, 0f, 45f);
+                bulletDragMinSpeed = gun.dragMinSpeed;
+                bulletSimulationSpeed = gun.projectielSimulatonSpeed; // у префаба simulationSpeed = 1
+            }
+            else
+            {
+                bulletDrag = 0f;
+                bulletDragMinSpeed = 1f;
+                bulletSimulationSpeed = 1f;
             }
 
             if (speed < MinBulletSpeed)

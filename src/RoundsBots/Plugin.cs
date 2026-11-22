@@ -15,7 +15,7 @@ namespace RoundsBots
     {
         public const string ModId = "com.kanty.rounds.bots";
         public const string ModName = "BotsAI";
-        public const string ModVersion = "0.5.1";
+        public const string ModVersion = "0.5.2";
 
         internal static ManualLogSource Log { get; private set; }
 
@@ -57,6 +57,15 @@ namespace RoundsBots
             catch (System.Exception ex)
             {
                 Log.LogWarning($"Hidden Cards compat failed: {ex.Message}");
+            }
+
+            try
+            {
+                BotsMenu.Register();
+            }
+            catch (System.Exception ex)
+            {
+                Log.LogWarning($"Mod options menu failed: {ex.Message}");
             }
 
             try
