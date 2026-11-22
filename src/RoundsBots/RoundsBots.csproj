@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\local.props" Condition="Exists('..\..\local.props')" />
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <AssemblyName>RoundsBots</AssemblyName>
+    <RootNamespace>RoundsBots</RootNamespace>
+    <Version>0.5.0</Version>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+
+    <!-- Paths. Override with local.props (not in git) or: dotnet build -p:RoundsDir=... -p:DevProfile=... -->
+    <RoundsDir Condition="'$(RoundsDir)' == ''">C:\Program Files (x86)\Steam\steamapps\common\ROUNDS</RoundsDir>
+    <Managed>$(RoundsDir)\ROUNDS_Data\Managed</Managed>
+    <DevProfile Condition="'$(DevProfile)' == ''">$(APPDATA)\r2modmanPlus-local\ROUNDS\profiles\Dev</DevProfile>
+    <BepInExCore>$(DevProfile)\BepInEx\core</BepInExCore>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp" HintPath="$(Managed)\Assembly-CSharp.dll" Private="false" />
+    <Reference Include="UnityEngine" HintPath="$(Managed)\UnityEngine.dll" Private="false" />
+    <Reference Include="UnityEngine.CoreModule" HintPath="$(Managed)\UnityEngine.CoreModule.dll" Private="false" />
+    <Reference Include="UnityEngine.Physics2DModule" HintPath="$(Managed)\UnityEngine.Physics2DModule.dll" Private="false" />
+    <Reference Include="InControl" HintPath="$(Managed)\InControl.dll" Private="false" />
+    <Reference Include="PhotonUnityNetworking" HintPath="$(Managed)\PhotonUnityNetworking.dll" Private="false" />
+    <Reference Include="UnboundLib" HintPath="$(DevProfile)/BepInEx/plugins/willis81808-UnboundLib/UnboundLib.dll" Private="false" />
+    <Reference Include="UnityEngine.IMGUIModule" HintPath="$(Managed)/UnityEngine.IMGUIModule.dll" Private="false" />
+    <Reference Include="UnityEngine.TextRenderingModule" HintPath="$(Managed)/UnityEngine.TextRenderingModule.dll" Private="false" />
+    <Reference Include="Photon3Unity3D" HintPath="$(Managed)/Photon3Unity3D.dll" Private="false" />
+    <Reference Include="Unity.TextMeshPro" HintPath="$(Managed)/Unity.TextMeshPro.dll" Private="false" />
+    <Reference Include="UnityEngine.UI" HintPath="$(Managed)/UnityEngine.UI.dll" Private="false" />
+    <Reference Include="PhotonRealtime" HintPath="$(Managed)\PhotonRealtime.dll" Private="false" />
+    <Reference Include="BepInEx" HintPath="$(BepInExCore)\BepInEx.dll" Private="false" />
+    <Reference Include="0Harmony" HintPath="$(BepInExCore)\0Harmony.dll" Private="false" />
+  </ItemGroup>
+
+  <!-- Після збірки копіюємо мод у профіль r2modman "Dev" -->
+  <!-- -p:SkipDeploy=true — зібрати, не копіюючи (наприклад, поки гра запущена) -->
+  <Target Name="DeployToDevProfile" AfterTargets="Build" Condition="Exists('$(DevProfile)') and '$(SkipDeploy)' != 'true'">
+    <!-- Папка у форматі r2modman (Автор-Назва) + запис у mods.yml профілю — тоді мод видно в списку r2modman -->
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(DevProfile)\BepInEx\plugins\Shidzenreku13-BotsAI" />
+    <Message Importance="high" Text="RoundsBots -> $(DevProfile)\BepInEx\plugins\Shidzenreku13-BotsAI" />
+  </Target>
+
+</Project>

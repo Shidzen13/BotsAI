@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Перерахунок оцінок бота для записаних виборів людини (human_cards.txt) поточною логікою. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\src\RoundsBots\Logic\*.cs" Link="Logic\%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>

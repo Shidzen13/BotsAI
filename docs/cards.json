@@ -1,0 +1,3142 @@
+[
+ {
+  "name": "ABYSSAL COUNTDOWN",
+  "mod": "Vanilla",
+  "rarity": "Rare",
+  "effects": {
+   "standStillSec": 7,
+   "buffDurationSec": 5,
+   "buffHealthMult": 2.0,
+   "sawDamage": 90,
+   "sawRadius": 4.5
+  },
+  "tags": [
+   "close-range",
+   "defensive",
+   "aura",
+   "conditional"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "high",
+  "mechanics": "Стояти на місці ~7 с (timeToFill 7) -> на 5 с: HP x2 і пилка навколо (Saw: 90 шкоди, радіус 4.5). Заряд спадає за 10 с руху.",
+  "notes": "Бот постійно рухається, тому майже ніколи не активує. Погано для бота.",
+  "inPool": true
+ },
+ {
+  "name": "BARRAGE",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "damageMult": 0.3,
+   "reloadTimeAddSec": 0.25,
+   "ammoAdd": 5,
+   "projectilesAdd": 4,
+   "spreadAdd": 0.13
+  },
+  "tags": [
+   "utility",
+   "multi-projectile"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "Шотган-залп: +4 кулі одночасно з розкидом.",
+  "notes": "На першій такій картці шкода x0.3 діє повністю; якщо вже є кілька куль, множник шкоди пом'якшується пропорційно (CopyGunStats). Добре з on-hit ефектами (poison, explosive).",
+  "inPool": true,
+  "specialValue": 0.2
+ },
+ {
+  "name": "BIG BULLET",
+  "mod": "Vanilla",
+  "rarity": "Common",
+  "effects": {
+   "reloadTimeAddSec": 0.25,
+   "bulletSizeAdd": 0.5
+  },
+  "tags": [
+   "utility"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Більші кулі (size +0.5) — легше влучити.",
+  "notes": "Слабка, але безпечна.",
+  "inPool": true,
+  "specialValue": 0.5
+ },
+ {
+  "name": "BOMBS AWAY",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "healthMult": 1.3,
+   "blockCooldownAddSec": 0.25,
+   "effectDamage": 30,
+   "effectRadius": 4
+  },
+  "tags": [
+   "close-range",
+   "defensive",
+   "on-block",
+   "explosive"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "low",
+  "mechanics": "Блок випускає кільце маленьких бомб навколо (вибух 30 шкоди, радіус 4).",
+  "notes": "Бомби летять повільно (projectileSpeed 0.3) — корисно лише впритул.",
+  "inPool": true,
+  "specialValue": 0.2
+ },
+ {
+  "name": "BOUNCY",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "damageMult": 1.25,
+   "reloadTimeAddSec": 0.25,
+   "bouncesAdd": 2
+  },
+  "tags": [
+   "long-range",
+   "bounce"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "+2 відскоки від стін.",
+  "notes": "Відскоки допомагають влучати з-за укриття; дальність не обмежена.",
+  "inPool": true
+ },
+ {
+  "name": "BRAWLER",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "buffHealthMult": 3.0,
+   "buffDurationSec": 3
+  },
+  "tags": [
+   "defensive",
+   "conditional"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "HP x3 на 3 с після того, як завдав шкоди.",
+  "notes": "Працює на будь-якій дистанції, але найкраще в постійному обміні шкодою.",
+  "inPool": true,
+  "specialValue": 1.1
+ },
+ {
+  "name": "BUCKSHOT",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "damageMult": 0.4,
+   "reloadTimeAddSec": 0.25,
+   "ammoAdd": 5,
+   "projectilesAdd": 4,
+   "bulletSpeedMult": 3.5,
+   "bulletGravityMult": 0.0,
+   "spreadAdd": 0.5,
+   "knockbackMult": 2.5,
+   "bulletLifetimeSec": 0.2,
+   "bulletDragAdd": 10.0,
+   "approxRange": 9
+  },
+  "tags": [
+   "close-range",
+   "multi-projectile"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "medium",
+  "mechanics": "Шотган: +4 кулі, сильний розкид 0.5, drag 10, кулі зникають через 0.2 с, без гравітації.",
+  "notes": "Дальність ~8-10 одиниць через drag+lifetime. Бот на 13-16 не влучить — або підходити впритул, або не брати. Шкода x0.4 за кулю (5 куль разом ~x2 впритул).",
+  "inPool": true
+ },
+ {
+  "name": "BURST",
+  "mod": "Vanilla",
+  "rarity": "Common",
+  "effects": {
+   "damageMult": 0.6,
+   "reloadTimeAddSec": 0.25,
+   "ammoAdd": 3,
+   "burstsAdd": 3,
+   "timeBetweenBulletsAdd": 0.025,
+   "spreadAdd": 0.04
+  },
+  "tags": [
+   "long-range",
+   "multi-projectile"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Постріл чергою з 3 куль (bursts 3, 0.025 с між кулями).",
+  "notes": "Хороша універсальна; шкода x0.6 на кулю = x1.8 за постріл.",
+  "inPool": true,
+  "specialValue": 1.1
+ },
+ {
+  "name": "CAREFUL PLANNING",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "damageMult": 2.0,
+   "attackCooldownMult": 2.5,
+   "reloadTimeAddSec": 0.5
+  },
+  "tags": [
+   "long-range"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "x2 шкода, але постріл утричі рідше (cooldown x2.5).",
+  "notes": "Добре для снайпера з точним прицілом.",
+  "inPool": true
+ },
+ {
+  "name": "CHASE",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "healthMult": 1.3,
+   "conditionalMoveSpeedMult": 1.6
+  },
+  "tags": [
+   "mobility",
+   "close-range"
+  ],
+  "playstyle": "mobility",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "+60% швидкості руху, коли рухаєшся до суперника.",
+  "notes": "Бот, що тримає дистанцію, майже не отримує бонус; HP +30% корисне завжди.",
+  "inPool": true,
+  "specialValue": 0.2
+ },
+ {
+  "name": "CHILLING PRESENCE",
+  "mod": "Vanilla",
+  "rarity": "Rare",
+  "effects": {
+   "healthMult": 1.25,
+   "auraRadius": 4.5,
+   "auraSlow": 0.5
+  },
+  "tags": [
+   "close-range",
+   "aura",
+   "defensive"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "none",
+  "mechanics": "Аура: сповільнює ворогів у радіусі 4.5 (slow 0.5, макс 0.7).",
+  "notes": "На 13-16 не дістає, але +25% HP — нормально.",
+  "inPool": true,
+  "specialValue": 0.3
+ },
+ {
+  "name": "COLD BULLETS",
+  "mod": "Vanilla",
+  "rarity": "Common",
+  "effects": {
+   "reloadTimeAddSec": 0.25,
+   "bulletSlowAdd": 0.7
+  },
+  "tags": [
+   "utility",
+   "on-hit"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Кулі сповільнюють ціль (+0.7 slow).",
+  "notes": "Сповільнена ціль = легше влучати з дальньої дистанції. Добре для бота.",
+  "inPool": true,
+  "specialValue": 1.2
+ },
+ {
+  "name": "COMBINE",
+  "mod": "Vanilla",
+  "rarity": "Common",
+  "effects": {
+   "damageMult": 2.0,
+   "reloadTimeAddSec": 0.5,
+   "ammoAdd": -2
+  },
+  "tags": [
+   "long-range"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "x2 шкода, -2 набої, +0.5 с перезарядки.",
+  "notes": "При базових 3 набоях лишається 1 — довгі перезарядки. Добре з Quick Reload.",
+  "inPool": true
+ },
+ {
+  "name": "DAZZLE",
+  "mod": "Vanilla",
+  "rarity": "Common",
+  "effects": {
+   "reloadTimeAddSec": 0.25
+  },
+  "tags": [
+   "utility",
+   "on-hit"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Влучання кілька разів стане ціль (stun 0.1 с кожні 0.35 с).",
+  "notes": "Безпечний контроль.",
+  "inPool": true,
+  "specialValue": 0.7
+ },
+ {
+  "name": "DECAY",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "healthMult": 1.5,
+   "damageTakenOverSec": 4.0
+  },
+  "tags": [
+   "defensive"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Отримана шкода розтягується на 4 с; +50% HP.",
+  "notes": "Чудова захисна, дає час на регенерацію/лікування.",
+  "inPool": true,
+  "specialValue": 0.5
+ },
+ {
+  "name": "DEFENDER",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "healthMult": 1.3,
+   "blockCooldownMult": 0.7
+  },
+  "tags": [
+   "defensive"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Кулдаун блоку x0.7, +30% HP.",
+  "notes": "Добре для бота, що вміє блокувати кулі.",
+  "inPool": true
+ },
+ {
+  "name": "Demonic pact",
+  "mod": "Vanilla",
+  "rarity": "Rare",
+  "effects": {
+   "attackCooldownMult": 0.025,
+   "reloadTimeAddSec": 0.25,
+   "ammoAdd": 9,
+   "noAutoFire": 1,
+   "selfDamagePerShot": 5,
+   "effectDamage": 2,
+   "effectRadius": 4
+  },
+  "tags": [
+   "utility",
+   "self-damage"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "high",
+  "mechanics": "Без кулдауну пострілу (attackSpeed x0.025), +9 набоїв, кожна куля дає вибух 2 шкоди r4; кожен постріл коштує HP (DealDamageToPlayer 5, текст: 10).",
+  "notes": "dontAllowAutoFire: треба окремо клацати на кожну кулю. Бот, що затискає постріл, стрілятиме лише раз/спамитиме і вбиватиме себе. Ризиковано.",
+  "inPool": true,
+  "specialValue": -6.0
+ },
+ {
+  "name": "DRILL AMMO",
+  "mod": "Vanilla",
+  "rarity": "Rare",
+  "effects": {
+   "reloadTimeAddSec": 0.25
+  },
+  "tags": [
+   "long-range",
+   "utility"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Кулі проходять крізь стіни до 7 м.",
+  "notes": "Корисно для бота, що стріляє з-за укриття; але бот має знати, що може стріляти крізь стіни.",
+  "inPool": true,
+  "specialValue": 0.2
+ },
+ {
+  "name": "ECHO",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "healthMult": 1.3,
+   "extraBlocks": 1
+  },
+  "tags": [
+   "defensive",
+   "on-block"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+1 додатковий (затриманий) блок; +30% HP.",
+  "notes": "Подвоює всі on-block ефекти.",
+  "inPool": true
+ },
+ {
+  "name": "EMP",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "healthMult": 1.3,
+   "blockCooldownAddSec": 0.25,
+   "effectSlow": 0.7
+  },
+  "tags": [
+   "close-range",
+   "on-block",
+   "defensive"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "low",
+  "mechanics": "Блок випускає кільце з 30 сповільнюючих куль (slow 0.7, шкода x0.1, drag 10).",
+  "notes": "Через drag 10 кулі швидко гальмують — дія лише поруч; +30% HP.",
+  "inPool": true,
+  "specialValue": 0.3
+ },
+ {
+  "name": "EMPOWER",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "blockCooldownAddSec": 0.25,
+   "nextShotDamageMult": 1.5,
+   "nextShotSpeedMult": 1.5
+  },
+  "tags": [
+   "long-range",
+   "on-block",
+   "utility"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "Після блоку наступний постріл x1.5 шкода і x1.5 швидкість; куля активує всі on-block ефекти там, де влучить.",
+  "notes": "Ключова синергія: перетворює ближні on-block ефекти (Shockwave, Static field, Saw, Overpower...) на дальні. Боту треба стріляти одразу після блоку.",
+  "inPool": true,
+  "specialValue": 0.6
+ },
+ {
+  "name": "EXPLOSIVE BULLET",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "attackCooldownMult": 2.0,
+   "reloadTimeAddSec": 0.25,
+   "effectDamage": 30,
+   "effectRadius": 4
+  },
+  "tags": [
+   "long-range",
+   "explosive",
+   "on-hit"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "Куля вибухає при влучанні: 30 шкоди, радіус 4, сильна відкидка. Постріл удвічі рідше.",
+  "notes": "Вибух б'є і по собі, якщо стріляти впритул. На дистанції — сильна.",
+  "inPool": true,
+  "specialValue": 2.8
+ },
+ {
+  "name": "FASTBALL",
+  "mod": "Vanilla",
+  "rarity": "Common",
+  "effects": {
+   "attackCooldownMult": 1.5,
+   "reloadTimeAddSec": 0.25,
+   "bulletSpeedMult": 3.5
+  },
+  "tags": [
+   "long-range"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "x3.5 швидкість кулі, постріл у 1.5 рази рідше.",
+  "notes": "Швидка куля = менше упередження, краща точність на дальній дистанції.",
+  "inPool": true,
+  "specialValue": 1.0
+ },
+ {
+  "name": "Fast forward",
+  "mod": "Vanilla",
+  "rarity": "Common",
+  "effects": {
+   "reloadTimeMult": 0.7,
+   "bulletSimSpeedMult": 2.0
+  },
+  "tags": [
+   "long-range"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Симуляція кулі x2 (летить удвічі швидше по тій самій траєкторії), перезарядка x0.7.",
+  "notes": "Дуже добра для бота: траєкторія не змінюється, лише час польоту.",
+  "inPool": true,
+  "specialValue": 0.6
+ },
+ {
+  "name": "FROST SLAM",
+  "mod": "Vanilla",
+  "rarity": "Common",
+  "effects": {
+   "healthMult": 1.3,
+   "blockCooldownAddSec": 0.25,
+   "effectRadius": 5,
+   "effectSlow": 2.2
+  },
+  "tags": [
+   "close-range",
+   "on-block",
+   "defensive"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "low",
+  "mechanics": "Блок сповільнює ворогів навколо (slow 2.2, радіус 5); +30% HP.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.4
+ },
+ {
+  "name": "GLASS CANNON",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "damageMult": 2.0,
+   "reloadTimeAddSec": 0.25,
+   "healthMult": 0.5
+  },
+  "tags": [
+   "long-range",
+   "risky"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "medium",
+  "mechanics": "x2 шкода, HP x0.5, +0.25 с перезарядки.",
+  "notes": "Для бота, що погано ухиляється, -50% HP дуже боляче.",
+  "inPool": true
+ },
+ {
+  "name": "GROW",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "reloadTimeAddSec": 0.25
+  },
+  "tags": [
+   "long-range",
+   "on-hit"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Кулі набирають шкоду під час польоту.",
+  "notes": "Чим далі ціль, тим сильніше — ідеально для дальнього бою.",
+  "inPool": true,
+  "specialValue": 0.9
+ },
+ {
+  "name": "Healing field",
+  "mod": "Vanilla",
+  "rarity": "Common",
+  "effects": {
+   "healthMult": 1.3,
+   "blockCooldownAddSec": 0.25,
+   "effectHeal": 55,
+   "effectRadius": 2,
+   "effectDelaySec": 1.5
+  },
+  "tags": [
+   "defensive",
+   "on-block"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Блок створює поле, яке через 1.5 с лікує на 55 HP у радіусі 2 (на місці блоку); +30% HP.",
+  "notes": "Щоб вилікуватися, треба лишатися на місці ~1.5 с.",
+  "inPool": true,
+  "specialValue": 0.4
+ },
+ {
+  "name": "HOMING",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "damageMult": 0.75,
+   "attackCooldownMult": 1.5,
+   "bulletSpeedMult": 0.7,
+   "bulletGravityMult": 0.5
+  },
+  "tags": [
+   "long-range",
+   "homing"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "Кулі наводяться на видимі цілі (Homing 350). Шкода x0.75, постріл у 1.5 рази рідше, швидкість x0.7, гравітація x0.5.",
+  "notes": "Компенсує неточний приціл бота. Текст картки каже +0.25 с перезарядки, але в префабі reloadTimeAdd = 0.",
+  "inPool": true,
+  "specialValue": 2.7
+ },
+ {
+  "name": "HUGE",
+  "mod": "Vanilla",
+  "rarity": "Common",
+  "effects": {
+   "healthMult": 1.8
+  },
+  "tags": [
+   "defensive"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+80% HP.",
+  "notes": "Простий і сильний вибір.",
+  "inPool": true
+ },
+ {
+  "name": "Implode",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "healthMult": 1.5,
+   "blockCooldownAddSec": 0.25,
+   "effectRadius": 9
+  },
+  "tags": [
+   "close-range",
+   "on-block"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "medium",
+  "mechanics": "Блок притягує ворогів у радіусі 9 до себе; +50% HP.",
+  "notes": "Затягує суперника впритул — добре лише для ближньої збірки.",
+  "inPool": true
+ },
+ {
+  "name": "LEECH",
+  "mod": "Vanilla",
+  "rarity": "Common",
+  "effects": {
+   "healthMult": 1.3,
+   "lifeStealAdd": 0.75
+  },
+  "tags": [
+   "defensive",
+   "lifesteal"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+75% вампіризм, +30% HP.",
+  "notes": "",
+  "inPool": true
+ },
+ {
+  "name": "LIFESTEALER",
+  "mod": "Vanilla",
+  "rarity": "Rare",
+  "effects": {
+   "healthMult": 1.25,
+   "auraRadius": 4,
+   "auraDamage": 5,
+   "auraTickSec": 0.3
+  },
+  "tags": [
+   "close-range",
+   "aura",
+   "lifesteal"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "low",
+  "mechanics": "Аура r4: кожні 0.3 с краде 5 HP у ворога поруч; +25% HP.",
+  "notes": "На дистанції 13-16 не працює.",
+  "inPool": true,
+  "specialValue": 0.7
+ },
+ {
+  "name": "MAYHEM",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "damageMult": 0.85,
+   "reloadTimeAddSec": 0.5,
+   "bouncesAdd": 5
+  },
+  "tags": [
+   "long-range",
+   "bounce"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "medium",
+  "mechanics": "+5 відскоків, шкода x0.85, +0.5 с перезарядки.",
+  "notes": "Кулі довго літають по арені й можуть влучити в самого бота.",
+  "inPool": true,
+  "specialValue": -0.4
+ },
+ {
+  "name": "OVERPOWER",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "healthMult": 1.3,
+   "blockCooldownAddSec": 0.25,
+   "effectRadius": 4,
+   "effectDamagePctMaxHp": 15
+  },
+  "tags": [
+   "close-range",
+   "on-block"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "low",
+  "mechanics": "Блок: через 0.5 с вибух r4 на 15% твого макс. HP; +30% HP.",
+  "notes": "Синергія з HP-картками (Tank, HUGE).",
+  "inPool": true,
+  "specialValue": 0.3
+ },
+ {
+  "name": "PARASITE",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "damageMult": 1.25,
+   "reloadTimeAddSec": 0.25,
+   "healthMult": 1.25,
+   "lifeStealAdd": 0.5
+  },
+  "tags": [
+   "long-range",
+   "dot",
+   "lifesteal"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Шкода кулі розтягується на 5 с; +50% вампіризм, +25% HP, x1.25 шкода.",
+  "notes": "",
+  "inPool": true
+ },
+ {
+  "name": "PHOENIX",
+  "mod": "Vanilla",
+  "rarity": "Rare",
+  "effects": {
+   "healthMult": 0.65,
+   "respawnsAdd": 1
+  },
+  "tags": [
+   "defensive"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Одне відродження за раунд; HP x0.65.",
+  "notes": "Дуже сильна для бота.",
+  "inPool": true
+ },
+ {
+  "name": "POISON",
+  "mod": "Vanilla",
+  "rarity": "Common",
+  "effects": {
+   "damageMult": 1.7,
+   "reloadTimeMult": 0.7,
+   "ammoAdd": -1
+  },
+  "tags": [
+   "long-range",
+   "dot"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "x1.7 шкода, розтягнута на 3 с; перезарядка x0.7; -1 набій.",
+  "notes": "",
+  "inPool": true
+ },
+ {
+  "name": "PRISITNE PERSEVERENCE",
+  "mod": "Vanilla",
+  "rarity": "Rare",
+  "effects": {
+   "conditionalHealthMult": 5.0,
+   "hpThreshold": 0.9
+  },
+  "tags": [
+   "defensive",
+   "conditional"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "HP x5, поки здоров'я вище 90%.",
+  "notes": "Синергія з регенерацією/лікуванням.",
+  "inPool": true,
+  "specialValue": 0.5
+ },
+ {
+  "name": "QUICK RELOAD",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "reloadTimeMult": 0.3
+  },
+  "tags": [
+   "utility"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Перезарядка x0.3.",
+  "notes": "Одна з найкращих загальних карток.",
+  "inPool": true
+ },
+ {
+  "name": "QUICK SHOT",
+  "mod": "Vanilla",
+  "rarity": "Common",
+  "effects": {
+   "reloadTimeAddSec": 0.25,
+   "bulletSpeedMult": 2.5
+  },
+  "tags": [
+   "long-range"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "x2.5 швидкість кулі.",
+  "notes": "Пряміша траєкторія, легше прицілитися.",
+  "inPool": true,
+  "specialValue": 0.7
+ },
+ {
+  "name": "RADAR SHOT",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "healthMult": 1.3,
+   "blockCooldownAddSec": 0.25,
+   "effectRadius": 12
+  },
+  "tags": [
+   "utility",
+   "on-block"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "Блок сканує радіус 12 і автоматично стріляє по знайдених ворогах; +30% HP.",
+  "notes": "Радіус 12 — працює з середньої дистанції.",
+  "inPool": true,
+  "specialValue": 0.6
+ },
+ {
+  "name": "RADIANCE",
+  "mod": "Vanilla",
+  "rarity": "Rare",
+  "effects": {
+   "healthMult": 1.3,
+   "effectDamage": 4
+  },
+  "tags": [
+   "utility"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "Під час перезарядки випускає сонячні хвилі (4 шкоди), частота росте; +30% HP.",
+  "notes": "Радіус хвиль у даних не знайдено (LineRangeEffect: 4 шкоди, відкидка 100, живе 0.7 с) — ймовірно ближній.",
+  "inPool": true
+ },
+ {
+  "name": "Refresh",
+  "mod": "Vanilla",
+  "rarity": "Rare",
+  "effects": {
+   "damageNeeded": 10
+  },
+  "tags": [
+   "defensive",
+   "on-hit"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Відновлює блок після 10 нанесеної шкоди.",
+  "notes": "Сильно для бота, що часто влучає.",
+  "inPool": true,
+  "specialValue": 1.0
+ },
+ {
+  "name": "REMOTE",
+  "mod": "Vanilla",
+  "rarity": "Rare",
+  "effects": {
+   "reloadTimeAddSec": 0.25,
+   "bulletSpeedMult": 0.6
+  },
+  "tags": [
+   "utility",
+   "needs-input"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "high",
+  "mechanics": "Кулями керують правим стиком/мишею. Швидкість кулі x0.6.",
+  "notes": "Бот не керує кулею після пострілу — фактично лише мінус до швидкості. Погано для бота.",
+  "inPool": true
+ },
+ {
+  "name": "RICCOCHET",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "attackCooldownMult": 0.75,
+   "reloadTimeAddSec": 0.25,
+   "bouncesAdd": 2,
+   "speedMultPerBounce": 0.5
+  },
+  "tags": [
+   "long-range",
+   "bounce"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "+2 відскоки (втрачають 50% швидкості), постріл x0.75 (швидше).",
+  "notes": "",
+  "inPool": true
+ },
+ {
+  "name": "SAW",
+  "mod": "Vanilla",
+  "rarity": "Rare",
+  "effects": {
+   "healthMult": 1.3,
+   "blockCooldownAddSec": 0.25,
+   "effectDamage": 60,
+   "effectRadius": 4.5,
+   "effectDurationSec": 2
+  },
+  "tags": [
+   "close-range",
+   "on-block",
+   "defensive"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "low",
+  "mechanics": "Блок на 2 с створює пилку навколо (60 шкоди, радіус 4.5); +30% HP.",
+  "notes": "Треба бути впритул.",
+  "inPool": true,
+  "specialValue": 0.5
+ },
+ {
+  "name": "SCAVENGER",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "reloadTimeAddSec": 0.5
+  },
+  "tags": [
+   "utility",
+   "on-hit"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Нанесення шкоди перезаряджає зброю.",
+  "notes": "Добре для швидкострілу/шотгана.",
+  "inPool": true,
+  "specialValue": 1.2
+ },
+ {
+  "name": "SHIELD CHARGE",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "blockCooldownAddSec": 0.25,
+   "chargeDamage": 25
+  },
+  "tags": [
+   "close-range",
+   "on-block",
+   "mobility"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "high",
+  "mechanics": "Блок кидає вперед (ривок 0.2 с), 25 шкоди при зіткненні, потім авто-блок.",
+  "notes": "Ривок у напрямку руху може скинути бота з платформи чи в пилку; бот блокує для захисту, а не для атаки.",
+  "inPool": true,
+  "specialValue": 0.2
+ },
+ {
+  "name": "SHIELDS UP",
+  "mod": "Vanilla",
+  "rarity": "Rare",
+  "effects": {
+   "reloadTimeAddSec": 0.5,
+   "blockCooldownAddSec": 0.5
+  },
+  "tags": [
+   "defensive",
+   "utility"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "medium",
+  "mechanics": "Останній постріл з магазину автоматично блокує; вимикає безперервну перезарядку.",
+  "notes": "+0.5 с перезарядки і +0.5 с кулдауну блоку.",
+  "inPool": true,
+  "specialValue": 0.3
+ },
+ {
+  "name": "Shockwave",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "healthMult": 1.5,
+   "blockCooldownAddSec": 0.25,
+   "effectRadius": 6.5
+  },
+  "tags": [
+   "close-range",
+   "on-block",
+   "defensive"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "none",
+  "mechanics": "Блок відштовхує ворогів (сила 30000, радіус 6.5, slow 0.5); +50% HP.",
+  "notes": "Добре проти ближніх суперників; +50% HP завжди корисні.",
+  "inPool": true,
+  "specialValue": 0.4
+ },
+ {
+  "name": "SILENCE",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "healthMult": 1.25,
+   "blockCooldownAddSec": 0.25,
+   "effectRadius": 5,
+   "silenceSec": 3.2,
+   "effectDamage": 10
+  },
+  "tags": [
+   "close-range",
+   "on-block"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "low",
+  "mechanics": "Блок: тиша (не можуть стріляти/блокувати) 3.2 с + 10 шкоди в радіусі 5; +25% HP.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.7
+ },
+ {
+  "name": "SNEAKY",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "reloadTimeAddSec": 0.25
+  },
+  "tags": [
+   "long-range",
+   "utility"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Кулі облітають землю (DodgeGround).",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.2
+ },
+ {
+  "name": "SPRAY",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "damageMult": 0.25,
+   "attackCooldownMult": 0.0909,
+   "reloadTimeAddSec": 0.25,
+   "ammoAdd": 12,
+   "spreadAdd": 0.1,
+   "recoilMult": 0.25
+  },
+  "tags": [
+   "utility",
+   "multi-projectile"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "Кулемет: постріл x0.09 (у ~11 разів частіше), +12 набоїв, шкода x0.25, розкид.",
+  "notes": "Розкид знижує влучність на дальній дистанції; бот має затискати постріл.",
+  "inPool": true
+ },
+ {
+  "name": "STATIC FIELD",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "blockCooldownAddSec": 0.25,
+   "effectRadius": 3,
+   "effectSlow": 0.85,
+   "effectDurationSec": 4.5
+  },
+  "tags": [
+   "close-range",
+   "on-block"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "low",
+  "mechanics": "Блок створює поле r3 на ~4.5 с, яке сповільнює (0.85) і завдає шкоди ворогам у ньому.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.5
+ },
+ {
+  "name": "STEADY SHOT",
+  "mod": "Vanilla",
+  "rarity": "Common",
+  "effects": {
+   "reloadTimeAddSec": 0.25,
+   "bulletSpeedMult": 2.0,
+   "healthMult": 1.4
+  },
+  "tags": [
+   "long-range",
+   "defensive"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+40% HP, x2 швидкість кулі.",
+  "notes": "Відмінна для бота.",
+  "inPool": true,
+  "specialValue": 0.55
+ },
+ {
+  "name": "SUPERNOVA",
+  "mod": "Vanilla",
+  "rarity": "Rare",
+  "effects": {
+   "healthMult": 1.5,
+   "blockCooldownAddSec": 0.5,
+   "pullRadius": 7,
+   "effectRadius": 12,
+   "effectDamage": 30
+  },
+  "tags": [
+   "utility",
+   "on-block"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "Блок: поле r7 тягне ворогів 2.1 с, потім вибух r12 (30 шкоди, slow); +50% HP.",
+  "notes": "Радіус 12 — дістає і з середньої дистанції.",
+  "inPool": true,
+  "specialValue": 0.5
+ },
+ {
+  "name": "TACTICAL RELOAD",
+  "mod": "Vanilla",
+  "rarity": "Rare",
+  "effects": {
+   "blockCooldownAddSec": 0.25
+  },
+  "tags": [
+   "utility",
+   "on-block"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Блок перезаряджає зброю.",
+  "notes": "Добре для бота, що часто блокує.",
+  "inPool": true,
+  "specialValue": 0.5
+ },
+ {
+  "name": "TANK",
+  "mod": "Vanilla",
+  "rarity": "Common",
+  "effects": {
+   "attackCooldownMult": 1.25,
+   "reloadTimeAddSec": 0.5,
+   "healthMult": 2.0
+  },
+  "tags": [
+   "defensive"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "HP x2, постріл x1.25 (повільніше), +0.5 с перезарядки.",
+  "notes": "",
+  "inPool": true
+ },
+ {
+  "name": "Target BOUNCE",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "damageMult": 0.8,
+   "reloadTimeAddSec": 0.25,
+   "bouncesAdd": 1
+  },
+  "tags": [
+   "long-range",
+   "bounce",
+   "homing"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+1 відскок, після відскоку куля летить у видиму ціль; шкода x0.8.",
+  "notes": "Компенсує промахи.",
+  "inPool": true,
+  "specialValue": 0.8
+ },
+ {
+  "name": "TASTE OF BLOOD",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "lifeStealAdd": 0.3,
+   "buffMoveSpeedMult": 1.5,
+   "buffDurationSec": 3
+  },
+  "tags": [
+   "mobility",
+   "lifesteal",
+   "on-hit"
+  ],
+  "playstyle": "mobility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+30% вампіризм; 3 с після шкоди: рух x1.5, стрибок x1.25.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.3
+ },
+ {
+  "name": "TELEPORT",
+  "mod": "Vanilla",
+  "rarity": "Rare",
+  "effects": {
+   "blockCooldownMult": 0.7,
+   "teleportDistance": 6
+  },
+  "tags": [
+   "mobility",
+   "on-block"
+  ],
+  "playstyle": "mobility",
+  "closeRange": false,
+  "botRisk": "high",
+  "mechanics": "Блок телепортує вперед на 6 одиниць; кулдаун блоку x0.7.",
+  "notes": "Небезпечно для бота: телепорт у прірву/пилку/за межу арени під час захисного блоку.",
+  "inPool": true
+ },
+ {
+  "name": "THRUSTER",
+  "mod": "Vanilla",
+  "rarity": "Uncommon",
+  "effects": {
+   "reloadTimeAddSec": 0.25
+  },
+  "tags": [
+   "long-range",
+   "on-hit"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Кулі мають двигуни, що штовхають ціль (сила 15000).",
+  "notes": "Може виштовхнути суперника за межі арени.",
+  "inPool": true,
+  "specialValue": 0.4
+ },
+ {
+  "name": "TIMED DETONATION",
+  "mod": "Vanilla",
+  "rarity": "Common",
+  "effects": {
+   "damageMult": 0.85,
+   "reloadTimeAddSec": 0.25,
+   "effectDamage": 30,
+   "effectRadius": 4
+  },
+  "tags": [
+   "long-range",
+   "explosive",
+   "on-hit"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Кулі ставлять бомби, що вибухають через 0.35 с (30 шкоди, радіус 4); шкода x0.85.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 2.0
+ },
+ {
+  "name": "TOXIC CLOUD",
+  "mod": "Vanilla",
+  "rarity": "Rare",
+  "effects": {
+   "damageMult": 0.75,
+   "attackCooldownMult": 1.2,
+   "reloadTimeAddSec": 0.5,
+   "effectRadius": 2.4,
+   "effectDamage": 8,
+   "effectDurationSec": 5.4
+  },
+  "tags": [
+   "long-range",
+   "on-hit",
+   "dot"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Кулі створюють отруйну хмару r2.4 на 5.4 с (8 шкоди/тік, slow 0.7). Постріл x1.2, +0.5 с перезарядки.",
+  "notes": "Прихована шкода кулі x0.75 (на картці не показано).",
+  "inPool": true,
+  "specialValue": 2.1
+ },
+ {
+  "name": "TRICKSTER",
+  "mod": "Vanilla",
+  "rarity": "Rare",
+  "effects": {
+   "damageMult": 0.8,
+   "reloadTimeAddSec": 0.5,
+   "bouncesAdd": 2,
+   "damageMultPerBounce": 1.8
+  },
+  "tags": [
+   "long-range",
+   "bounce"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "+2 відскоки, кожен відскок x1.8 шкоди; базова шкода x0.8.",
+  "notes": "Сильна з відскоками, але треба цілитися через стіни.",
+  "inPool": true,
+  "specialValue": 0.1
+ },
+ {
+  "name": "WIND UP",
+  "mod": "Vanilla",
+  "rarity": "Common",
+  "effects": {
+   "damageMult": 1.6,
+   "attackCooldownMult": 2.0,
+   "reloadTimeAddSec": 0.5,
+   "bulletSpeedMult": 2.0
+  },
+  "tags": [
+   "long-range"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "x1.6 шкода, x2 швидкість кулі, постріл удвічі рідше, +0.5 с перезарядки.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.55
+ },
+ {
+  "name": "Regenerator",
+  "mod": "RSCards (RS_Mind)",
+  "rarity": "Common",
+  "effects": {
+   "regenPerSec": 10.0
+  },
+  "tags": [
+   "defensive"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+10 HP/с регенерації.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.6
+ },
+ {
+  "name": "Reckless Attack",
+  "mod": "RSCards (RS_Mind)",
+  "rarity": "Common",
+  "effects": {
+   "damageMult": 0.85,
+   "attackCooldownMult": 0.5,
+   "reloadTimeAddSec": -0.5
+  },
+  "tags": [
+   "utility"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Постріл x0.5 (удвічі швидше), -0.5 с перезарядки, шкода x0.85.",
+  "notes": "Сильна DPS-картка.",
+  "inPool": true
+ },
+ {
+  "name": "Hitscan",
+  "mod": "RSCards (RS_Mind)",
+  "rarity": "Uncommon",
+  "effects": {
+   "attackCooldownMult": 1.25,
+   "reloadTimeAddSec": 1.0,
+   "bulletSimSpeedMult": 100.0,
+   "bulletGravityMult": 0.0
+  },
+  "tags": [
+   "long-range",
+   "exclusive"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Симуляція кулі x100 (майже миттєве влучання), без гравітації, постріл x1.25 (повільніше), +1 с перезарядки.",
+  "notes": "Взаємовиключна з Mortar. Hitscan_Bullet_Mono обнуляє відскоки кулі (RayHitReflect.reflects = 0) — усі картки на відскоки марні. Прихований +1.0 с reloadTimeAdd (на картці не показано). Для бота — чудова: прямий приціл без упередження.",
+  "inPool": true,
+  "specialValue": 2.0
+ },
+ {
+  "name": "Reflection Accelerant",
+  "mod": "RSCards (RS_Mind)",
+  "rarity": "Rare",
+  "effects": {
+   "damageMult": 1.5,
+   "bulletSpeedMult": 1.25,
+   "bouncesAdd": 2,
+   "speedMultPerBounce": 1.35
+  },
+  "tags": [
+   "long-range",
+   "bounce"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "+2 відскоки, кожен відскок x1.35 швидкості; x1.5 шкода, x1.25 швидкість кулі.",
+  "notes": "Рідкість Rare.",
+  "inPool": true
+ },
+ {
+  "name": "Spare Shotgun",
+  "mod": "RSCards (RS_Mind)",
+  "rarity": "Uncommon",
+  "effects": {},
+  "tags": [
+   "utility",
+   "needs-input"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "high",
+  "mechanics": "Дає другу зброю — шотган (3 кулі, шкода x0.4, швидкість x3.5, магазин 8); перемикання Q/E (WeaponsManager).",
+  "notes": "Бот не перемикає зброю — картка марна для бота, доки бот не навчиться Q/E.",
+  "inPool": true
+ },
+ {
+  "name": "Mortar",
+  "mod": "RSCards (RS_Mind)",
+  "rarity": "Rare",
+  "effects": {
+   "damageMult": 1.35,
+   "reloadTimeAddSec": 0.5,
+   "bulletGravityMult": 0.0
+  },
+  "tags": [
+   "utility",
+   "needs-input",
+   "exclusive"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "medium",
+  "mechanics": "Кожен новий постріл розвертає вже випущені кулі в поточному напрямку прицілу; x1.35 шкода, без гравітації, +0.5 с перезарядки.",
+  "notes": "Рідкість у бандлі = Rare (README: Uncommon). Взаємовиключна з Hitscan. Поведінка залежить від того, куди бот цілиться в момент наступного пострілу.",
+  "inPool": true
+ },
+ {
+  "name": "Open Chamber",
+  "mod": "RSCards (RS_Mind)",
+  "rarity": "Common",
+  "effects": {
+   "attackCooldownMult": 0.75,
+   "reloadTimeAddSec": -0.5,
+   "bulletSpeedMult": 0.85
+  },
+  "tags": [
+   "utility"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "-0.5 с перезарядки, постріл x0.75, швидкість кулі x0.85.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": -0.1
+ },
+ {
+  "name": "Split",
+  "mod": "RSCards (RS_Mind)",
+  "rarity": "Common",
+  "effects": {
+   "damageMult": 0.75,
+   "reloadTimeAddSec": -0.5,
+   "ammoAdd": 3
+  },
+  "tags": [
+   "utility"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+3 набої, -0.5 с перезарядки, шкода x0.75.",
+  "notes": "",
+  "inPool": true
+ },
+ {
+  "name": "Slug",
+  "mod": "RSCards (RS_Mind)",
+  "rarity": "Common",
+  "effects": {
+   "damageMult": 2.0,
+   "bulletSpeedMult": 0.75
+  },
+  "tags": [
+   "long-range"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "x2 шкода, швидкість кулі x0.75.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": -0.25
+ },
+ {
+  "name": "Harming Field",
+  "mod": "RSCards (RS_Mind)",
+  "rarity": "Common",
+  "effects": {
+   "damageMult": 1.3,
+   "blockCooldownAddSec": 0.25,
+   "effectDamage": 55,
+   "effectRadius": 2,
+   "effectDelaySec": 1.5
+  },
+  "tags": [
+   "close-range",
+   "on-block"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "low",
+  "mechanics": "Блок ставить коло, яке через 1.5 с вибухає: 55 шкоди, радіус 2; x1.3 шкода зброї; +0.25 с кулдауну блоку.",
+  "notes": "Аналог Healing field, але б'є ворогів. Ворог має стояти в колі через 1.5 с — тільки впритул (або з Empower).",
+  "inPool": true,
+  "specialValue": 0.2
+ },
+ {
+  "name": "Rebound",
+  "mod": "RSCards (RS_Mind)",
+  "rarity": "Common",
+  "effects": {
+   "bouncesAdd": 1
+  },
+  "tags": [
+   "long-range",
+   "bounce"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+1 відскок.",
+  "notes": "",
+  "inPool": true
+ },
+ {
+  "name": "Repentance",
+  "mod": "RSCards (RS_Mind)",
+  "rarity": "Common",
+  "effects": {
+   "healthMult": 2.0,
+   "lifeStealAdd": -0.5
+  },
+  "tags": [
+   "defensive",
+   "gated"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "HP x2, вампіризм -0.5.",
+  "notes": "З'являється лише при вампіризмі >= 0.5. Поза тижнем 1 квітня (активна версія).",
+  "inPool": true
+ },
+ {
+  "name": "Bounce Absorption",
+  "mod": "RSCards (RS_Mind)",
+  "rarity": "Uncommon",
+  "effects": {
+   "damageMult": 2.0,
+   "bulletSpeedMult": 1.5,
+   "bouncesAdd": -2
+  },
+  "tags": [
+   "long-range",
+   "gated"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Перетворює відскоки на силу: x2 шкода, x1.5 швидкість кулі, -2 відскоки.",
+  "notes": "З'являється лише якщо в гравця вже >= 2 відскоки (категорія BounceAbsorption знімається з чорного списку на PlayerPickStart).",
+  "inPool": true,
+  "specialValue": 0.3
+ },
+ {
+  "name": "Changeup",
+  "mod": "RSCards (RS_Mind)",
+  "rarity": "Common",
+  "effects": {
+   "attackCooldownMult": 0.7,
+   "bulletSimSpeedMult": 0.7
+  },
+  "tags": [
+   "utility"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "Постріл x0.7 (швидше), симуляція кулі x0.7 (куля летить повільніше по тій самій траєкторії).",
+  "notes": "Повільна куля = більше упередження.",
+  "inPool": true
+ },
+ {
+  "name": "Twin Scythe",
+  "mod": "RSCards (RS_Mind)",
+  "rarity": "Common",
+  "effects": {
+   "orbitRadius": 2,
+   "scytheDamage": 95
+  },
+  "tags": [
+   "close-range",
+   "aura",
+   "defensive"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "none",
+  "mechanics": "Навколо гравця обертається коса (радіус орбіти 2): 95 шкоди x2^(n-1), знищує кулі. Макс. 4 коси.",
+  "notes": "Знищення куль — сильний захист навіть на дистанції. Не з'являється, якщо встановлено RSClasses.",
+  "inPool": true,
+  "specialValue": 2.3
+ },
+ {
+  "name": "Nimble",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "moveSpeedMult": 1.1,
+   "reloadTimeMult": 0.8696,
+   "attackCooldownMult": 0.8333,
+   "bulletSpeedMult": 1.25
+  },
+  "tags": [
+   "mobility",
+   "utility"
+  ],
+  "playstyle": "mobility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Рух x1.1, перезарядка x0.87, постріл x0.83, швидкість кулі x1.25.",
+  "notes": "Чисті плюси.",
+  "inPool": true,
+  "specialValue": 0.2
+ },
+ {
+  "name": "Warpath",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "moveSpeedMult": 1.1,
+   "damagePerBonusMoveSpeed": 1.3
+  },
+  "tags": [
+   "mobility",
+   "long-range"
+  ],
+  "playstyle": "mobility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Рух x1.1; шкода x(1 + 1.3*(рух-1)) за бонус швидкості руху.",
+  "notes": "Синергія з картками на швидкість руху.",
+  "inPool": true,
+  "specialValue": 0.5
+ },
+ {
+  "name": "Mending Reload",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "healthMult": 1.2,
+   "reloadTimeMult": 0.85,
+   "healOnReloadFlat": 12,
+   "healOnReloadPctMaxHp": 1.5
+  },
+  "tags": [
+   "defensive"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "HP x1.2, перезарядка x0.85; кожна перезарядка лікує 12 + 1.5% макс. HP.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.4
+ },
+ {
+  "name": "Snipers Nest",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Rare",
+  "effects": {
+   "reloadTimeMult": 1.4,
+   "damageMult": 1.35,
+   "bulletSpeedMult": 2.5,
+   "bulletGravityMult": 0.4,
+   "setsMaxAmmoTo": 1,
+   "damageAddPerLostAmmo": 0.14
+  },
+  "tags": [
+   "long-range"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "Магазин стає 1 набій; +0.14 шкоди за кожен втрачений набій; x1.35 шкода, x2.5 швидкість кулі, гравітація x0.4, перезарядка x1.4.",
+  "notes": "Добре для точного бота; погано з картками на набої/шотган.",
+  "inPool": true
+ },
+ {
+  "name": "Sentry",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Rare",
+  "effects": {
+   "blockCooldownMult": 0.75
+  },
+  "tags": [
+   "long-range",
+   "needs-input",
+   "conditional"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "high",
+  "mechanics": "Блок присівши (вниз) перемикає Sentry Mode: шкода x0.35, постріл x0.18 (у ~5.5 раза частіше), розкид, гравітація x0.2, рух x0.2, стрибок x0.4. Кулдаун блоку x0.75.",
+  "notes": "Бот не присідає під час блоку, тож отримує лише -25% кулдауну. Якщо випадково увімкне — стоятиме майже нерухомо.",
+  "inPool": true
+ },
+ {
+  "name": "Mirror",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "blockCooldownMult": 0.5,
+   "healthMult": 0.7
+  },
+  "tags": [
+   "defensive"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "Кулдаун блоку x0.5, HP x0.7.",
+  "notes": "",
+  "inPool": true
+ },
+ {
+  "name": "Raid Boss",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Rare",
+  "effects": {
+   "moveSpeedMult": 0.6,
+   "playerGravityMult": 0.65,
+   "healthMult": 3.2,
+   "playerSizeMult": 1.35,
+   "bulletSimSpeedMult": 0.6,
+   "damageMult": 1.3,
+   "attackCooldownMult": 1.25
+  },
+  "tags": [
+   "defensive",
+   "close-range"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "medium",
+  "mechanics": "HP x3.2, розмір x1.35, рух x0.6, гравітація гравця x0.65, x1.3 шкода, постріл x1.25, симуляція кулі x0.6.",
+  "notes": "Взаємовиключна з Pipsqueak. Великий і повільний — легка ціль, але дуже живучий.",
+  "inPool": true,
+  "specialValue": -0.4
+ },
+ {
+  "name": "Cloak and Dagger",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "damageMult": 1.25,
+   "moveSpeedMult": 1.15,
+   "critChanceAddPct": 25
+  },
+  "tags": [
+   "long-range",
+   "crit"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+25% шансу криту (крит = x2 шкоди), x1.25 шкода, рух x1.15.",
+  "notes": "Клас Critical.",
+  "inPool": true,
+  "specialValue": 0.65
+ },
+ {
+  "name": "Crimson Potion",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "onBlock_healPctPerSec": 6,
+   "buffDurationSec": 3,
+   "potionCooldownSec": 6
+  },
+  "tags": [
+   "defensive",
+   "on-block",
+   "potion"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Блок (кулдаун 6 с): знімає DoT і лікує 6%/с 3 с.",
+  "notes": "Зілля діють на блок. 2+ різних зілля відкривають Alchemist.",
+  "inPool": true,
+  "specialValue": 0.6
+ },
+ {
+  "name": "Cerulean Potion",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "onBlock_healthMult": 1.55,
+   "onBlock_damageMult": 1.55,
+   "buffDurationSec": 3,
+   "potionCooldownSec": 6
+  },
+  "tags": [
+   "defensive",
+   "on-block",
+   "potion"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Блок (кд 6 с): +55% HP і +55% шкоди на 3 с.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.9
+ },
+ {
+  "name": "Citrine Potion",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "onBlock_attackSpeedBonusPct": 75,
+   "onBlock_reloadSpeedBonusPct": 100,
+   "buffDurationSec": 3,
+   "potionCooldownSec": 6
+  },
+  "tags": [
+   "utility",
+   "on-block",
+   "potion"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Блок (кд 6 с): +75% швидкості атаки, +100% швидкості перезарядки на 3 с.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.6
+ },
+ {
+  "name": "Coral Potion",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "onBlock_bulletSpeedMult": 1.8,
+   "onBlock_bouncesAdd": 4,
+   "buffDurationSec": 3,
+   "potionCooldownSec": 6
+  },
+  "tags": [
+   "utility",
+   "on-block",
+   "potion"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "Блок (кд 6 с): +80% швидкості й гравітації кулі, +4 відскоки на 3 с.",
+  "notes": "Змінює балістику під час бою — прицілу бота треба читати поточні стати.",
+  "inPool": true,
+  "specialValue": 0.2
+ },
+ {
+  "name": "Cola Potion",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "buffDurationSec": 3,
+   "potionCooldownSec": 6
+  },
+  "tags": [
+   "mobility",
+   "on-block",
+   "potion"
+  ],
+  "playstyle": "mobility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Блок (кд 6 с): кулі підпалюють, більша мобільність на 3 с.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.4
+ },
+ {
+  "name": "Moonwalker",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "moveSpeedMult": 0.8,
+   "jumpMult": 1.2,
+   "playerGravityMult": 0.162,
+   "damageMult": 1.35,
+   "bulletGravityMult": 0.162,
+   "bulletSpeedMult": 0.8
+  },
+  "tags": [
+   "mobility",
+   "long-range"
+  ],
+  "playstyle": "mobility",
+  "closeRange": false,
+  "botRisk": "medium",
+  "mechanics": "Гравітація гравця і кулі x0.162; x1.35 шкода; рух x0.8, стрибок x1.2, швидкість кулі x0.8.",
+  "notes": "Низька гравітація ламає навігацію/стрибки бота (A* розрахований на звичайну гравітацію).",
+  "inPool": true
+ },
+ {
+  "name": "Treasure Trove",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Rare",
+  "effects": {},
+  "tags": [
+   "utility"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "Наступний вибір карток складається тільки зі Скарбів (Treasure).",
+  "notes": "Без статів зараз, але скарби дуже сильні.",
+  "inPool": true
+ },
+ {
+  "name": "Treasure Map",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "healthMult": 1.1
+  },
+  "tags": [
+   "defensive"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "HP x1.1; разом із Compass дає випадковий Скарб.",
+  "notes": "'+20% Attack speed' на картці не працює: statModifiers.attackSpeedMultiplier не копіюється ApplyCardStats. Ігнорується: statModifiers.attackSpeedMultiplier (не копіюється ApplyCardStats — ефект не працює).",
+  "inPool": true,
+  "specialValue": 0.4
+ },
+ {
+  "name": "Compass",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "healthMult": 1.2
+  },
+  "tags": [
+   "defensive"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "HP x1.2; разом із Treasure Map дає випадковий Скарб.",
+  "notes": "'+10% Attack speed' не працює (як у Treasure Map). Ігнорується: statModifiers.attackSpeedMultiplier (не копіюється ApplyCardStats — ефект не працює).",
+  "inPool": true,
+  "specialValue": 0.4
+ },
+ {
+  "name": "Metamorphosis",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "healthMult": 1.06,
+   "damageMult": 1.06,
+   "regenPerSec": 1.2
+  },
+  "tags": [
+   "utility"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "x1.06 шкода, x1.06 HP, +1.2 регенерації (текст: +0.6). Відкриває Iron-картки.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.5
+ },
+ {
+  "name": "Iron Carapace",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "healthMult": 1.75,
+   "extraBlocks": 1
+  },
+  "tags": [
+   "defensive",
+   "gated"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "HP x1.75, +1 блок. Потребує Metamorphosis (забирає її).",
+  "notes": "'-30% Block cooldown' не працює: код ставить block.cooldown, який ApplyCardStats не копіює. Ігнорується: block.cooldown (не копіюється ApplyCardStats — ефект не працює).",
+  "inPool": true
+ },
+ {
+  "name": "Iron Pincers",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "damageMult": 1.6,
+   "attackCooldownMult": 0.7692,
+   "bulletSpeedMult": 1.3,
+   "ammoAdd": 4
+  },
+  "tags": [
+   "long-range",
+   "gated"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "x1.6 шкода, постріл x0.77, швидкість кулі x1.3, +4 набої. Потребує Metamorphosis (забирає її).",
+  "notes": "Одна з найсильніших атакувальних карток.",
+  "inPool": true,
+  "specialValue": 0.2
+ },
+ {
+  "name": "Iron Heart",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "healthMult": 1.5,
+   "moveSpeedMult": 1.2,
+   "lifeStealAdd": 0.4,
+   "regenPerSec": 15
+  },
+  "tags": [
+   "defensive",
+   "gated",
+   "lifesteal"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "HP x1.5, рух x1.2, +15 регенерації, +0.4 вампіризм. Потребує Metamorphosis (забирає її).",
+  "notes": "",
+  "inPool": true
+ },
+ {
+  "name": "Boxing Glove",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "bulletSpeedMult": 0.8,
+   "damageMult": 1.25,
+   "knockbackMult": 1.5
+  },
+  "tags": [
+   "utility"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Відкидка x1.5, x1.25 шкода, швидкість кулі x0.8.",
+  "notes": "Відкидка може виштовхнути суперника за межу арени.",
+  "inPool": true
+ },
+ {
+  "name": "Angelic",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "extraJumps": 1,
+   "moveSpeedMult": 1.1,
+   "damageMult": 1.1,
+   "bulletGravityMult": 0.65
+  },
+  "tags": [
+   "mobility"
+  ],
+  "playstyle": "mobility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+1 стрибок, рух x1.1, x1.1 шкода, гравітація кулі x0.65.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.15
+ },
+ {
+  "name": "New Sneakers",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "moveSpeedMult": 1.15,
+   "jumpMult": 1.1,
+   "attackCooldownMult": 0.7407
+  },
+  "tags": [
+   "mobility"
+  ],
+  "playstyle": "mobility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Постріл x0.74, рух x1.15, стрибок x1.1.",
+  "notes": "",
+  "inPool": true
+ },
+ {
+  "name": "Bottomless Pockets",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "moveSpeedMult": 0.9,
+   "damageMult": 1.4,
+   "ammoAdd": 6
+  },
+  "tags": [
+   "long-range"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+6 набоїв, x1.4 шкода, рух x0.9.",
+  "notes": "",
+  "inPool": true
+ },
+ {
+  "name": "Cursed Plunder",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "moveSpeedMult": 0.9,
+   "healthMult": 0.85,
+   "damageMult": 0.85
+  },
+  "tags": [
+   "utility"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "Одразу дає випадковий Скарб; x0.85 шкода, x0.85 HP, рух x0.9.",
+  "notes": "Загалом вигідно (скарби сильні).",
+  "inPool": true,
+  "specialValue": 2.0
+ },
+ {
+  "name": "Infernal",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "attackCooldownMult": 0.689,
+   "ammoAdd": -1,
+   "bulletSpeedMult": 1.5,
+   "dotDurationSec": 2
+  },
+  "tags": [
+   "long-range",
+   "dot"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Кулі завдають шкоду протягом 2 с; постріл x0.69, швидкість кулі x1.5, -1 набій.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.3
+ },
+ {
+  "name": "Vampiric Block",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Rare",
+  "effects": {
+   "blockCooldownMult": 0.25,
+   "selfDamagePctMaxHpPerExtraBlock": 8
+  },
+  "tags": [
+   "defensive",
+   "self-damage"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "high",
+  "mechanics": "Кулдаун блоку x0.25; після 3 блоків поспіль кожен наступний блок забирає 8% макс. HP x (стаки-3), скидається за 3 с без блоку.",
+  "notes": "Бот, що часто блокує, вбиватиме себе. Брати тільки якщо бот обмежує частоту блоку.",
+  "inPool": true
+ },
+ {
+  "name": "Guardian Angel",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "cond_belowHalfHp_maxHealthMult": 2.0,
+   "cond_healPctPer025s": 3,
+   "buffDurationSec": 6
+  },
+  "tags": [
+   "defensive",
+   "conditional"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Перший раз за раунд нижче 50% HP: на 6 с макс. HP x2 і лікування 3% кожні 0.25 с.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 1.7
+ },
+ {
+  "name": "Precision",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "attackCooldownMult": 1.15,
+   "critChanceAddPct": 50
+  },
+  "tags": [
+   "long-range",
+   "crit"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+50% шансу криту (x2 шкоди), постріл x1.15.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 1.2
+ },
+ {
+  "name": "Defensive Dice",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "healthMult": 1.4,
+   "critChanceAddPct": 25
+  },
+  "tags": [
+   "defensive",
+   "crit"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+25% криту, HP x1.4; -0.25 с кулдауну блоку за кожні 25% криту.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.75
+ },
+ {
+  "name": "Pipsqueak",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Rare",
+  "effects": {
+   "moveSpeedMult": 1.18,
+   "jumpMult": 1.22,
+   "playerGravityMult": 1.13,
+   "healthMult": 0.7,
+   "playerSizeMult": 0.75,
+   "bulletSimSpeedMult": 1.2,
+   "damageMult": 0.85,
+   "attackCooldownMult": 0.75
+  },
+  "tags": [
+   "mobility"
+  ],
+  "playstyle": "mobility",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "Розмір x0.75, рух x1.18, стрибок x1.22, гравітація x1.13, HP x0.7, шкода x0.85, постріл x0.75, симуляція кулі x1.2.",
+  "notes": "Взаємовиключна з Raid Boss. Менша ціль.",
+  "inPool": true,
+  "specialValue": 0.2
+ },
+ {
+  "name": "All or Nothing",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "healthMult": 0.75,
+   "reloadTimeMult": 0.6667,
+   "blockCooldownAddSec": 0.5,
+   "damageMult": 1.55
+  },
+  "tags": [
+   "long-range",
+   "risky"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "medium",
+  "mechanics": "x1.55 шкода (текст +65%), перезарядка x0.67, HP x0.75 (текст -30%), +0.5 с кулдауну блоку.",
+  "notes": "",
+  "inPool": true
+ },
+ {
+  "name": "Binding Chains",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Rare",
+  "effects": {
+   "moveSpeedMult": 1.15,
+   "chainRadius": 10,
+   "breakDistance": 8,
+   "stunSec": 1.4
+  },
+  "tags": [
+   "close-range",
+   "aura"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "low",
+  "mechanics": "Ланцюги чіпляються до ворогів у радіусі ~10 у прямій видимості; якщо тримаються 1.5 с — оглушення+тиша 1.4 с; рвуться далі 8. Рух x1.15.",
+  "notes": "Радіус ~10 — менше за дистанцію бота 13-16; треба триматися ближче.",
+  "inPool": true,
+  "specialValue": 0.6
+ },
+ {
+  "name": "Ferocity",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "healthMult": 1.2,
+   "lifeStealAdd": 0.3,
+   "critChanceAddPct": 25
+  },
+  "tags": [
+   "defensive",
+   "crit",
+   "lifesteal"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+25% криту, +0.3 вампіризм, HP x1.2.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.65
+ },
+ {
+  "name": "Expedition",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Rare",
+  "effects": {},
+  "tags": [
+   "utility"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "Скарби з невеликим шансом з'являються у виборі карток.",
+  "notes": "Без статів.",
+  "inPool": true,
+  "specialValue": -0.3
+ },
+ {
+  "name": "Scaredy Cat",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "healthMult": 0.75,
+   "triggerRadius": 12,
+   "cond_noEnemyNear_damageMult": 1.5,
+   "cond_noEnemyNear_attackCooldownMult": 0.667,
+   "cond_enemyNear_moveSpeedMult": 1.75
+  },
+  "tags": [
+   "long-range",
+   "conditional"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "HP x0.75. Якщо ворога НЕМАЄ в радіусі 12: x1.5 шкода, постріл x0.67. Якщо є: рух x1.75, стрибок x1.25.",
+  "notes": "Ідеально для бота, що тримає дистанцію >12.",
+  "inPool": true,
+  "specialValue": 1.5
+ },
+ {
+  "name": "Fortress",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "blockCooldownMult": 0.7,
+   "healthMult": 1.3,
+   "reloadTimeAddSec": 0.25,
+   "lifeStealAdd": 0.2
+  },
+  "tags": [
+   "defensive",
+   "lifesteal"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "HP x1.3, кулдаун блоку x0.7 (текст -20%), +0.2 вампіризм, +0.25 с перезарядки.",
+  "notes": "",
+  "inPool": true
+ },
+ {
+  "name": "Dancing Bullet",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "bulletGravityMult": 1.3,
+   "bulletSpeedMult": 1.3,
+   "bouncesAdd": 1,
+   "blockCooldownAddSec": 0.25
+  },
+  "tags": [
+   "long-range",
+   "bounce"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+1 відскок, швидкість кулі x1.3, гравітація кулі x1.3, +0.25 с кулдауну блоку.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.1
+ },
+ {
+  "name": "Magic Trick",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "projectilesAdd": 1,
+   "spreadAdd": 0.05,
+   "ammoAdd": 3,
+   "reloadTimeAddSec": 0.25,
+   "damageMult": 0.7
+  },
+  "tags": [
+   "utility",
+   "multi-projectile"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+1 куля (розкид 0.05), +3 набої, шкода x0.7, +0.25 с перезарядки.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.7
+ },
+ {
+  "name": "The Golden Egg",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Rare",
+  "effects": {},
+  "tags": [
+   "utility"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "Через 3 раунди «вилуплюється»: дає набір випадкових карток/скарбів + The Eggs Blessing.",
+  "notes": "Нічого не дає одразу.",
+  "inPool": true,
+  "specialValue": 0.8
+ },
+ {
+  "name": "The Eggs Blessing",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "healthMult": 1.1,
+   "damageMult": 1.1
+  },
+  "tags": [
+   "defensive",
+   "gated"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "x1.1 шкода, x1.1 HP. Видається з The Golden Egg.",
+  "notes": "",
+  "inPool": true
+ },
+ {
+  "name": "Alchemist",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Hidden",
+  "effects": {
+   "blockCooldownMult": 0.8,
+   "healthMult": 1.2
+  },
+  "tags": [
+   "defensive",
+   "gated",
+   "potion"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Кулдаун зіль 3 с замість 6, тривалість 5 с; HP x1.2, кулдаун блоку x0.8. Потребує 2 різних зілля.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 1.2
+ },
+ {
+  "name": "Grovetenders Rest",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Hidden",
+  "effects": {},
+  "tags": [
+   "defensive",
+   "gated"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Slow Start після активації також дає +50% HP, -10% кулдауну, +1 блок. Потребує Grovetenders Shield + Slow Start.",
+  "notes": "Стати на картці не застосовуються напряму.",
+  "inPool": true,
+  "specialValue": 1.1
+ },
+ {
+  "name": "Hexing Reload",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Hidden",
+  "effects": {
+   "reloadTimeMult": 0.87
+  },
+  "tags": [
+   "long-range",
+   "gated",
+   "dot"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Після перезарядки 1 с постріли дають потрійний Hex; перезарядка x0.87. Потребує Mending Reload + Spellbound.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.3
+ },
+ {
+  "name": "Heavensent",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Hidden",
+  "effects": {},
+  "tags": [
+   "defensive",
+   "gated"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Guardian Angel: ще +40% шкоди і тривалість 12 с. Потребує Angelic + Guardian Angel.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 1.5
+ },
+ {
+  "name": "Thorn Shot",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Hidden",
+  "effects": {},
+  "tags": [
+   "long-range",
+   "gated",
+   "automatic"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Saw Shot: кулдаун 12 с, але пилка розміром 3 і 22 + 6*damage шкоди. Потребує Druids Blessing + Saw Shot.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.4
+ },
+ {
+  "name": "Overcrit",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Hidden",
+  "effects": {
+   "critChanceAddPct": 25
+  },
+  "tags": [
+   "long-range",
+   "gated",
+   "crit"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+25% криту; макс. шанс криту 200% (понад 100% — ще x1.5). Відкривається при криті >= 100%.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.6
+ },
+ {
+  "name": "Burning Binds",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Hidden",
+  "effects": {},
+  "tags": [
+   "close-range",
+   "gated"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "none",
+  "mechanics": "Binding Chains тримає вдвічі коротше, але завдає 20 + 30% макс. HP. Потребує Infernal + Binding Chains.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 1.5
+ },
+ {
+  "name": "Feline Frenzy",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Hidden",
+  "effects": {},
+  "tags": [
+   "long-range",
+   "gated",
+   "crit"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Якщо ворога немає в радіусі 12: +25% криту, крит +50% шкоди. За кодом відкривається парою Scaredy Cat + Fortress.",
+  "notes": "Текст картки каже 'Scaredy Cat + Cloak and Dagger', але категорію CatT знімають Fortress/Scaredy Cat.",
+  "inPool": true,
+  "specialValue": 0.7
+ },
+ {
+  "name": "Giants Gauntlet",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Treasure",
+  "effects": {
+   "healthMult": 2,
+   "regenPctMaxHpPerSec": 2.5
+  },
+  "tags": [
+   "defensive",
+   "treasure"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "HP x2 (текст +75%), регенерація 2.5% HP/с.",
+  "notes": "Скарб.",
+  "inPool": true,
+  "specialValue": 0.5
+ },
+ {
+  "name": "Dead Mans Boots",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Treasure",
+  "effects": {
+   "damageMult": 1.5,
+   "moveSpeedMult": 1.2,
+   "autoCooldownSec": 4
+  },
+  "tags": [
+   "long-range",
+   "treasure",
+   "automatic"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Кожні 4 с наступний постріл автоматично заряджається (шкода x1.5 за кожну копію); x1.5 шкода, рух x1.2.",
+  "notes": "Скарб.",
+  "inPool": true,
+  "specialValue": 0.4
+ },
+ {
+  "name": "Merlins Staff",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Treasure",
+  "effects": {
+   "knockbackMult": 1.4,
+   "spreadAdd": 0.15,
+   "ammoAdd": 9,
+   "burstsAdd": 3,
+   "bulletGravityMult": 0
+  },
+  "tags": [
+   "long-range",
+   "treasure",
+   "multi-projectile"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Черга з 3 куль, +9 набоїв, гравітація кулі 0, відкидка x1.4, розкид 0.15.",
+  "notes": "Скарб. Без гравітації — простий приціл.",
+  "inPool": true,
+  "specialValue": 1.2
+ },
+ {
+  "name": "Grovetenders Shield",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Treasure",
+  "effects": {
+   "extraBlocks": 2,
+   "blockCooldownAddSec": 0.5,
+   "healthMult": 1.5
+  },
+  "tags": [
+   "defensive",
+   "treasure"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+2 блоки, HP x1.5, +0.5 с кулдауну блоку.",
+  "notes": "Скарб.",
+  "inPool": true
+ },
+ {
+  "name": "Pickpockets Dagger",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Treasure",
+  "effects": {
+   "attackCooldownMult": 0.6666,
+   "moveSpeedMult": 1.1,
+   "critChanceAddPct": 50
+  },
+  "tags": [
+   "long-range",
+   "treasure",
+   "crit"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+50% криту, крит +25% шкоди, постріл x0.67, рух x1.1.",
+  "notes": "Скарб.",
+  "inPool": true,
+  "specialValue": 1.45
+ },
+ {
+  "name": "Zephyrs Blessing",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Treasure",
+  "effects": {
+   "playerGravityMult": 0.7,
+   "extraJumps": 2,
+   "moveSpeedMult": 1.2,
+   "cond_inAir_damageBonusPct": 40,
+   "cond_inAir_attackSpeedBonusPct": 40
+  },
+  "tags": [
+   "mobility",
+   "treasure",
+   "conditional"
+  ],
+  "playstyle": "mobility",
+  "closeRange": false,
+  "botRisk": "medium",
+  "mechanics": "+2 стрибки, гравітація гравця x0.7, рух x1.2; у повітрі +40% шкоди і швидкості атаки.",
+  "notes": "Скарб. Текст '+20% Damage' у коді не встановлено. Низька гравітація заважає навігації бота.",
+  "inPool": true,
+  "specialValue": 0.6
+ },
+ {
+  "name": "Demeters Bounty",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Treasure",
+  "effects": {
+   "perBlockStack_lifeStealAdd": 0.06,
+   "perBlockStack_attackSpeedBonusPct": 5,
+   "perBlockStack_damageBonusPct": 4
+  },
+  "tags": [
+   "defensive",
+   "treasure",
+   "on-block"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Кожен блок дає стак: +6% вампіризму, +5% швидкості атаки, +4% шкоди.",
+  "notes": "Скарб. Добре для бота, що часто блокує.",
+  "inPool": true,
+  "specialValue": 1.5
+ },
+ {
+  "name": "Apollos Quiver",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Treasure",
+  "effects": {
+   "reloadTimeMult": 0.7143,
+   "attackCooldownMult": 0.7692,
+   "ammoAdd": 3,
+   "afterReload_attackSpeedBonusPct": 50
+  },
+  "tags": [
+   "long-range",
+   "treasure"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Перезарядка x0.71, постріл x0.77, +3 набої; +50% швидкості атаки 0.5 с після перезарядки.",
+  "notes": "Скарб.",
+  "inPool": true,
+  "specialValue": 0.2
+ },
+ {
+  "name": "Draculas Cloak",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Treasure",
+  "effects": {
+   "damageMult": 1.25,
+   "healthMult": 1.25,
+   "lifeStealAdd": 0.75
+  },
+  "tags": [
+   "defensive",
+   "treasure",
+   "lifesteal"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+0.75 вампіризм, x1.25 шкода, HP x1.25; регенерація залежно від вампіризму.",
+  "notes": "Скарб.",
+  "inPool": true,
+  "specialValue": 0.3
+ },
+ {
+  "name": "Familiars Friend",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Treasure",
+  "effects": {
+   "bouncesAdd": 3,
+   "attackCooldownMult": 0.833,
+   "bulletGravityMult": 1.2,
+   "spreadAdd": 0.05
+  },
+  "tags": [
+   "long-range",
+   "treasure",
+   "bounce",
+   "dot"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "+3 відскоки, постріл x0.83, гравітація кулі x1.2; кулі дають DoT лише гравцям.",
+  "notes": "Скарб.",
+  "inPool": true
+ },
+ {
+  "name": "Saw Shot",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "autoCooldownSec": 8
+  },
+  "tags": [
+   "long-range",
+   "automatic"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Кожні 8 с автоматично летить пилка до найближчого ворога (37.5 од/с, 18 + 4*damage шкоди, розмір 2.2, живе 4 с).",
+  "notes": "Автоматична — нічого не вимагає від бота. Дуже добра для бота.",
+  "inPool": true,
+  "specialValue": 1.0
+ },
+ {
+  "name": "Slow Start",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "cond_afterSec": 12,
+   "cond_damageMult": 1.5,
+   "cond_attackSpeedBonusPct": 30,
+   "cond_moveSpeedBonusPct": 20
+  },
+  "tags": [
+   "long-range",
+   "automatic",
+   "conditional"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Через 12 с після старту раунду: x1.5 шкода, +30% швидкості атаки, +20% руху до кінця раунду.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.9
+ },
+ {
+  "name": "Druids Blessing",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "healthMult": 1.35,
+   "autoHealPctMaxHp": 6,
+   "autoCooldownSec": 5
+  },
+  "tags": [
+   "defensive",
+   "automatic"
+  ],
+  "playstyle": "defensive",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "HP x1.35; кожні 5 с лікує 6% макс. HP.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.2
+ },
+ {
+  "name": "Faster Hardware",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "automaticCooldownMult": 0.714
+  },
+  "tags": [
+   "utility",
+   "gated",
+   "automatic"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Кулдауни Automatic-карток x0.714. Потрібна будь-яка Automatic-картка.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.0
+ },
+ {
+  "name": "Overdrive",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "attackCooldownMult": 0.7143,
+   "automaticCooldownMult": 0.833
+  },
+  "tags": [
+   "utility",
+   "gated",
+   "automatic"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Постріл x0.71; кулдауни Automatic x0.83. Потрібна Automatic-картка.",
+  "notes": "'-15% Block cooldown' не працює (block.cooldown не копіюється). Ігнорується: block.cooldown (не копіюється ApplyCardStats — ефект не працює).",
+  "inPool": true,
+  "specialValue": 0.15
+ },
+ {
+  "name": "Nimble+",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Common",
+  "effects": {
+   "moveSpeedMult": 1.15,
+   "reloadTimeMult": 0.8333,
+   "attackCooldownMult": 0.8333,
+   "automaticCooldownMult": 0.869
+  },
+  "tags": [
+   "mobility",
+   "gated",
+   "automatic"
+  ],
+  "playstyle": "mobility",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Рух x1.15, перезарядка x0.83, постріл x0.83; кулдауни Automatic x0.87. Потрібна Automatic-картка.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.1
+ },
+ {
+  "name": "Nuclear Reactor",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "damageMult": 0.85,
+   "healthMult": 0.85,
+   "automaticCooldownMult": 0.606
+  },
+  "tags": [
+   "utility",
+   "gated",
+   "automatic"
+  ],
+  "playstyle": "utility",
+  "closeRange": false,
+  "botRisk": "low",
+  "mechanics": "Кулдауни Automatic x0.606; x0.85 шкода, x0.85 HP. Потрібна Automatic-картка.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.0
+ },
+ {
+  "name": "Ecliptic Library",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Rare",
+  "effects": {
+   "auraRadius": 7
+  },
+  "tags": [
+   "close-range",
+   "aura",
+   "dot"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "none",
+  "mechanics": "Три томи обертаються навколо; гравці ближче ~7 отримують Hex (1% макс. HP за стак за 6 с).",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.2
+ },
+ {
+  "name": "Spellbound",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "hexStacksPerHit": 3
+  },
+  "tags": [
+   "long-range",
+   "on-hit",
+   "dot"
+  ],
+  "playstyle": "long-range",
+  "closeRange": false,
+  "botRisk": "none",
+  "mechanics": "Кулі накладають 3 Hex (кожен — 1% макс. HP за 6 с).",
+  "notes": "Добре проти танків.",
+  "inPool": true,
+  "specialValue": 0.3
+ },
+ {
+  "name": "Bewitching",
+  "mod": "KeysCards (Keys)",
+  "rarity": "Uncommon",
+  "effects": {
+   "auraRadius": 6,
+   "autoCooldownSec": 5,
+   "hexStacks": 12
+  },
+  "tags": [
+   "close-range",
+   "automatic",
+   "dot"
+  ],
+  "playstyle": "close-range",
+  "closeRange": true,
+  "botRisk": "none",
+  "mechanics": "Кожні 5 с накладає 12 Hex на ворогів у радіусі ~6.",
+  "notes": "",
+  "inPool": true,
+  "specialValue": 0.4
+ }
+]

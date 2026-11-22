@@ -1,0 +1,456 @@
+ABYSSAL COUNTDOWN [Vanilla/Rare] base=1.20 special=- risk=high
+  unmapped: {"standStillSec": 7, "buffDurationSec": 5, "buffHealthMult": 2.0, "sawDamage": 90, "sawRadius": 4.5}
+  mechanics: Стояти на місці ~7 с (timeToFill 7) -> на 5 с: HP x2 і пилка навколо (Saw: 90 шкоди, радіус 4.5). Заряд спадає за 10 с руху.
+Alchemist [KeysCards (Keys)/Hidden] base=0.79 special=- risk=none
+  unmapped: {}
+  mechanics: Кулдаун зіль 3 с замість 6, тривалість 5 с; HP x1.2, кулдаун блоку x0.8. Потребує 2 різних зілля.
+All or Nothing [KeysCards (Keys)/Common] base=1.03 special=- risk=medium
+  unmapped: {}
+  mechanics: x1.55 шкода (текст +65%), перезарядка x0.67, HP x0.75 (текст -30%), +0.5 с кулдауну блоку.
+Angelic [KeysCards (Keys)/Common] base=1.23 special=- risk=none
+  unmapped: {"bulletGravityMult": 0.65}
+  mechanics: +1 стрибок, рух x1.1, x1.1 шкода, гравітація кулі x0.65.
+Apollos Quiver [KeysCards (Keys)/Treasure] base=1.33 special=- risk=none
+  unmapped: {"afterReload_attackSpeedBonusPct": 50}
+  mechanics: Перезарядка x0.71, постріл x0.77, +3 набої; +50% швидкості атаки 0.5 с після перезарядки.
+BARRAGE [Vanilla/Uncommon] base=0.51 special=- risk=low
+  unmapped: {"spreadAdd": 0.13}
+  mechanics: Шотган-залп: +4 кулі одночасно з розкидом.
+Bewitching [KeysCards (Keys)/Uncommon] base=0.60 special=- risk=none
+  unmapped: {"auraRadius": 6, "autoCooldownSec": 5, "hexStacks": 12}
+  mechanics: Кожні 5 с накладає 12 Hex на ворогів у радіусі ~6.
+BIG BULLET [Vanilla/Common] base=-0.18 special=- risk=none
+  unmapped: {"bulletSizeAdd": 0.5}
+  mechanics: Більші кулі (size +0.5) — легше влучити.
+Binding Chains [KeysCards (Keys)/Rare] base=1.41 special=- risk=low
+  unmapped: {"chainRadius": 10, "breakDistance": 8, "stunSec": 1.4}
+  mechanics: Ланцюги чіпляються до ворогів у радіусі ~10 у прямій видимості; якщо тримаються 1.5 с — оглушення+тиша 1.4 с; рвуться далі 8. Рух x1.15.
+BOMBS AWAY [Vanilla/Uncommon] base=1.16 special=- risk=low
+  unmapped: {"effectDamage": 30, "effectRadius": 4}
+  mechanics: Блок випускає кільце маленьких бомб навколо (вибух 30 шкоди, радіус 4).
+Bottomless Pockets [KeysCards (Keys)/Common] base=1.45 special=- risk=none
+  unmapped: {}
+  mechanics: +6 набоїв, x1.4 шкода, рух x0.9.
+Bounce Absorption [RSCards (RS_Mind)/Uncommon] base=1.88 special=- risk=none
+  unmapped: {"bulletSpeedMult": 1.5}
+  mechanics: Перетворює відскоки на силу: x2 шкода, x1.5 швидкість кулі, -2 відскоки.
+BOUNCY [Vanilla/Uncommon] base=1.89 special=- risk=low
+  unmapped: {}
+  mechanics: +2 відскоки від стін.
+Boxing Glove [KeysCards (Keys)/Common] base=0.67 special=- risk=none
+  unmapped: {"bulletSpeedMult": 0.8, "knockbackMult": 1.5}
+  mechanics: Відкидка x1.5, x1.25 шкода, швидкість кулі x0.8.
+BRAWLER [Vanilla/Uncommon] base=0.60 special=- risk=low
+  unmapped: {"buffHealthMult": 3.0, "buffDurationSec": 3}
+  mechanics: HP x3 на 3 с після того, як завдав шкоди.
+BUCKSHOT [Vanilla/Uncommon] base=1.37 special=- risk=medium
+  unmapped: {"bulletSpeedMult": 3.5, "bulletGravityMult": 0.0, "spreadAdd": 0.5, "knockbackMult": 2.5, "bulletLifetimeSec": 0.2, "bulletDragAdd": 10.0, "approxRange": 9}
+  mechanics: Шотган: +4 кулі, сильний розкид 0.5, drag 10, кулі зникають через 0.2 с, без гравітації.
+Burning Binds [KeysCards (Keys)/Hidden] base=0.00 special=- risk=none
+  unmapped: {}
+  mechanics: Binding Chains тримає вдвічі коротше, але завдає 20 + 30% макс. HP. Потребує Infernal + Binding Chains.
+BURST [Vanilla/Common] base=-1.41 special=- risk=none
+  unmapped: {"burstsAdd": 3, "timeBetweenBulletsAdd": 0.025, "spreadAdd": 0.04}
+  mechanics: Постріл чергою з 3 куль (bursts 3, 0.025 с між кулями).
+CAREFUL PLANNING [Vanilla/Uncommon] base=0.51 special=- risk=none
+  unmapped: {}
+  mechanics: x2 шкода, але постріл утричі рідше (cooldown x2.5).
+Cerulean Potion [KeysCards (Keys)/Uncommon] base=0.60 special=- risk=none
+  unmapped: {"onBlock_healthMult": 1.55, "onBlock_damageMult": 1.55, "buffDurationSec": 3, "potionCooldownSec": 6}
+  mechanics: Блок (кд 6 с): +55% HP і +55% шкоди на 3 с.
+Changeup [RSCards (RS_Mind)/Common] base=0.71 special=- risk=low
+  unmapped: {"bulletSimSpeedMult": 0.7}
+  mechanics: Постріл x0.7 (швидше), симуляція кулі x0.7 (куля летить повільніше по тій самій траєкторії).
+CHASE [Vanilla/Uncommon] base=1.26 special=- risk=low
+  unmapped: {"conditionalMoveSpeedMult": 1.6}
+  mechanics: +60% швидкості руху, коли рухаєшся до суперника.
+CHILLING PRESENCE [Vanilla/Rare] base=1.76 special=- risk=none
+  unmapped: {"auraRadius": 4.5, "auraSlow": 0.5}
+  mechanics: Аура: сповільнює ворогів у радіусі 4.5 (slow 0.5, макс 0.7).
+Citrine Potion [KeysCards (Keys)/Uncommon] base=0.60 special=- risk=none
+  unmapped: {"onBlock_attackSpeedBonusPct": 75, "onBlock_reloadSpeedBonusPct": 100, "buffDurationSec": 3, "potionCooldownSec": 6}
+  mechanics: Блок (кд 6 с): +75% швидкості атаки, +100% швидкості перезарядки на 3 с.
+Cloak and Dagger [KeysCards (Keys)/Uncommon] base=1.48 special=- risk=none
+  unmapped: {"critChanceAddPct": 25}
+  mechanics: +25% шансу криту (крит = x2 шкоди), x1.25 шкода, рух x1.15.
+Cola Potion [KeysCards (Keys)/Uncommon] base=0.60 special=- risk=none
+  unmapped: {"buffDurationSec": 3, "potionCooldownSec": 6}
+  mechanics: Блок (кд 6 с): кулі підпалюють, більша мобільність на 3 с.
+COLD BULLETS [Vanilla/Common] base=-0.18 special=- risk=none
+  unmapped: {"bulletSlowAdd": 0.7}
+  mechanics: Кулі сповільнюють ціль (+0.7 slow).
+COMBINE [Vanilla/Common] base=1.54 special=- risk=low
+  unmapped: {}
+  mechanics: x2 шкода, -2 набої, +0.5 с перезарядки.
+Compass [KeysCards (Keys)/Common] base=0.46 special=- risk=low
+  unmapped: {}
+  mechanics: HP x1.2; разом із Treasure Map дає випадковий Скарб.
+Coral Potion [KeysCards (Keys)/Uncommon] base=0.60 special=- risk=low
+  unmapped: {"onBlock_bulletSpeedMult": 1.8, "onBlock_bouncesAdd": 4, "buffDurationSec": 3, "potionCooldownSec": 6}
+  mechanics: Блок (кд 6 с): +80% швидкості й гравітації кулі, +4 відскоки на 3 с.
+Crimson Potion [KeysCards (Keys)/Uncommon] base=0.60 special=- risk=none
+  unmapped: {"onBlock_healPctPerSec": 6, "buffDurationSec": 3, "potionCooldownSec": 6}
+  mechanics: Блок (кулдаун 6 с): знімає DoT і лікує 6%/с 3 с.
+Cursed Plunder [KeysCards (Keys)/Uncommon] base=-0.45 special=- risk=low
+  unmapped: {}
+  mechanics: Одразу дає випадковий Скарб; x0.85 шкода, x0.85 HP, рух x0.9.
+Dancing Bullet [KeysCards (Keys)/Common] base=0.31 special=- risk=none
+  unmapped: {"bulletGravityMult": 1.3, "bulletSpeedMult": 1.3}
+  mechanics: +1 відскок, швидкість кулі x1.3, гравітація кулі x1.3, +0.25 с кулдауну блоку.
+DAZZLE [Vanilla/Common] base=-0.18 special=- risk=none
+  unmapped: {}
+  mechanics: Влучання кілька разів стане ціль (stun 0.1 с кожні 0.35 с).
+Dead Mans Boots [KeysCards (Keys)/Treasure] base=1.49 special=- risk=none
+  unmapped: {"autoCooldownSec": 4}
+  mechanics: Кожні 4 с наступний постріл автоматично заряджається (шкода x1.5 за кожну копію); x1.5 шкода, рух x1.2.
+DECAY [Vanilla/Uncommon] base=1.61 special=- risk=none
+  unmapped: {"damageTakenOverSec": 4.0}
+  mechanics: Отримана шкода розтягується на 4 с; +50% HP.
+DEFENDER [Vanilla/Uncommon] base=1.79 special=- risk=none
+  unmapped: {}
+  mechanics: Кулдаун блоку x0.7, +30% HP.
+Defensive Dice [KeysCards (Keys)/Uncommon] base=1.44 special=- risk=none
+  unmapped: {"critChanceAddPct": 25}
+  mechanics: +25% криту, HP x1.4; -0.25 с кулдауну блоку за кожні 25% криту.
+Demeters Bounty [KeysCards (Keys)/Treasure] base=0.00 special=- risk=none
+  unmapped: {"perBlockStack_lifeStealAdd": 0.06, "perBlockStack_attackSpeedBonusPct": 5, "perBlockStack_damageBonusPct": 4}
+  mechanics: Кожен блок дає стак: +6% вампіризму, +5% швидкості атаки, +4% шкоди.
+Demonic pact [Vanilla/Rare] base=9.30 special=- risk=high
+  unmapped: {"noAutoFire": 1, "selfDamagePerShot": 5, "effectDamage": 2, "effectRadius": 4}
+  mechanics: Без кулдауну пострілу (attackSpeed x0.025), +9 набоїв, кожна куля дає вибух 2 шкоди r4; кожен постріл коштує HP (DealDamageToPlayer 5, текст: 10).
+Draculas Cloak [KeysCards (Keys)/Treasure] base=2.73 special=- risk=none
+  unmapped: {}
+  mechanics: +0.75 вампіризм, x1.25 шкода, HP x1.25; регенерація залежно від вампіризму.
+DRILL AMMO [Vanilla/Rare] base=1.02 special=- risk=none
+  unmapped: {}
+  mechanics: Кулі проходять крізь стіни до 7 м.
+Druids Blessing [KeysCards (Keys)/Uncommon] base=1.35 special=- risk=none
+  unmapped: {"autoHealPctMaxHp": 6, "autoCooldownSec": 5}
+  mechanics: HP x1.35; кожні 5 с лікує 6% макс. HP.
+ECHO [Vanilla/Uncommon] base=2.46 special=- risk=none
+  unmapped: {}
+  mechanics: +1 додатковий (затриманий) блок; +30% HP.
+Ecliptic Library [KeysCards (Keys)/Rare] base=1.20 special=- risk=none
+  unmapped: {"auraRadius": 7}
+  mechanics: Три томи обертаються навколо; гравці ближче ~7 отримують Hex (1% макс. HP за стак за 6 с).
+EMP [Vanilla/Uncommon] base=1.16 special=- risk=low
+  unmapped: {"effectSlow": 0.7}
+  mechanics: Блок випускає кільце з 30 сповільнюючих куль (slow 0.7, шкода x0.1, drag 10).
+EMPOWER [Vanilla/Uncommon] base=0.51 special=- risk=low
+  unmapped: {"nextShotDamageMult": 1.5, "nextShotSpeedMult": 1.5}
+  mechanics: Після блоку наступний постріл x1.5 шкода і x1.5 швидкість; куля активує всі on-block ефекти там, де влучить.
+Expedition [KeysCards (Keys)/Rare] base=1.20 special=- risk=low
+  unmapped: {}
+  mechanics: Скарби з невеликим шансом з'являються у виборі карток.
+EXPLOSIVE BULLET [Vanilla/Uncommon] base=-0.96 special=- risk=low
+  unmapped: {"effectDamage": 30, "effectRadius": 4}
+  mechanics: Куля вибухає при влучанні: 30 шкоди, радіус 4, сильна відкидка. Постріл удвічі рідше.
+Familiars Friend [KeysCards (Keys)/Treasure] base=1.57 special=- risk=none
+  unmapped: {"bulletGravityMult": 1.2, "spreadAdd": 0.05}
+  mechanics: +3 відскоки, постріл x0.83, гравітація кулі x1.2; кулі дають DoT лише гравцям.
+Fast forward [Vanilla/Common] base=0.54 special=- risk=none
+  unmapped: {"bulletSimSpeedMult": 2.0}
+  mechanics: Симуляція кулі x2 (летить удвічі швидше по тій самій траєкторії), перезарядка x0.7.
+FASTBALL [Vanilla/Common] base=-0.99 special=- risk=none
+  unmapped: {"bulletSpeedMult": 3.5}
+  mechanics: x3.5 швидкість кулі, постріл у 1.5 рази рідше.
+Faster Hardware [KeysCards (Keys)/Common] base=0.00 special=- risk=none
+  unmapped: {"automaticCooldownMult": 0.714}
+  mechanics: Кулдауни Automatic-карток x0.714. Потрібна будь-яка Automatic-картка.
+Feline Frenzy [KeysCards (Keys)/Hidden] base=0.00 special=- risk=none
+  unmapped: {}
+  mechanics: Якщо ворога немає в радіусі 12: +25% криту, крит +50% шкоди. За кодом відкривається парою Scaredy Cat + Fortress.
+Ferocity [KeysCards (Keys)/Uncommon] base=1.66 special=- risk=none
+  unmapped: {"critChanceAddPct": 25}
+  mechanics: +25% криту, +0.3 вампіризм, HP x1.2.
+Fortress [KeysCards (Keys)/Common] base=1.41 special=- risk=none
+  unmapped: {}
+  mechanics: HP x1.3, кулдаун блоку x0.7 (текст -20%), +0.2 вампіризм, +0.25 с перезарядки.
+FROST SLAM [Vanilla/Common] base=0.56 special=- risk=low
+  unmapped: {"effectRadius": 5, "effectSlow": 2.2}
+  mechanics: Блок сповільнює ворогів навколо (slow 2.2, радіус 5); +30% HP.
+Giants Gauntlet [KeysCards (Keys)/Treasure] base=1.73 special=- risk=none
+  unmapped: {"regenPctMaxHpPerSec": 2.5}
+  mechanics: HP x2 (текст +75%), регенерація 2.5% HP/с.
+GLASS CANNON [Vanilla/Uncommon] base=0.77 special=- risk=medium
+  unmapped: {}
+  mechanics: x2 шкода, HP x0.5, +0.25 с перезарядки.
+Grovetenders Rest [KeysCards (Keys)/Hidden] base=0.00 special=- risk=none
+  unmapped: {}
+  mechanics: Slow Start після активації також дає +50% HP, -10% кулдауну, +1 блок. Потребує Grovetenders Shield + Slow Start.
+Grovetenders Shield [KeysCards (Keys)/Treasure] base=3.24 special=- risk=none
+  unmapped: {}
+  mechanics: +2 блоки, HP x1.5, +0.5 с кулдауну блоку.
+GROW [Vanilla/Uncommon] base=0.42 special=- risk=none
+  unmapped: {}
+  mechanics: Кулі набирають шкоду під час польоту.
+Guardian Angel [KeysCards (Keys)/Uncommon] base=0.60 special=- risk=none
+  unmapped: {"cond_belowHalfHp_maxHealthMult": 2.0, "cond_healPctPer025s": 3, "buffDurationSec": 6}
+  mechanics: Перший раз за раунд нижче 50% HP: на 6 с макс. HP x2 і лікування 3% кожні 0.25 с.
+Harming Field [RSCards (RS_Mind)/Common] base=0.70 special=- risk=low
+  unmapped: {"effectDamage": 55, "effectRadius": 2, "effectDelaySec": 1.5}
+  mechanics: Блок ставить коло, яке через 1.5 с вибухає: 55 шкоди, радіус 2; x1.3 шкода зброї; +0.25 с кулдауну блоку.
+Healing field [Vanilla/Common] base=0.56 special=- risk=none
+  unmapped: {"effectHeal": 55, "effectRadius": 2, "effectDelaySec": 1.5}
+  mechanics: Блок створює поле, яке через 1.5 с лікує на 55 HP у радіусі 2 (на місці блоку); +30% HP.
+Heavensent [KeysCards (Keys)/Hidden] base=0.00 special=- risk=none
+  unmapped: {}
+  mechanics: Guardian Angel: ще +40% шкоди і тривалість 12 с. Потребує Angelic + Guardian Angel.
+Hexing Reload [KeysCards (Keys)/Hidden] base=0.21 special=- risk=none
+  unmapped: {}
+  mechanics: Після перезарядки 1 с постріли дають потрійний Hex; перезарядка x0.87. Потребує Mending Reload + Spellbound.
+Hitscan [RSCards (RS_Mind)/Uncommon] base=-0.45 special=- risk=none
+  unmapped: {"bulletSimSpeedMult": 100.0, "bulletGravityMult": 0.0}
+  mechanics: Симуляція кулі x100 (майже миттєве влучання), без гравітації, постріл x1.25 (повільніше), +1 с перезарядки.
+HOMING [Vanilla/Uncommon] base=-1.07 special=- risk=low
+  unmapped: {"bulletSpeedMult": 0.7, "bulletGravityMult": 0.5}
+  mechanics: Кулі наводяться на видимі цілі (Homing 350). Шкода x0.75, постріл у 1.5 рази рідше, швидкість x0.7, гравітація x0.5.
+HUGE [Vanilla/Common] base=1.47 special=- risk=none
+  unmapped: {}
+  mechanics: +80% HP.
+Implode [Vanilla/Uncommon] base=1.52 special=- risk=medium
+  unmapped: {"effectRadius": 9}
+  mechanics: Блок притягує ворогів у радіусі 9 до себе; +50% HP.
+Infernal [KeysCards (Keys)/Common] base=0.65 special=- risk=none
+  unmapped: {"bulletSpeedMult": 1.5, "dotDurationSec": 2}
+  mechanics: Кулі завдають шкоду протягом 2 с; постріл x0.69, швидкість кулі x1.5, -1 набій.
+Iron Carapace [KeysCards (Keys)/Common] base=2.60 special=- risk=none
+  unmapped: {}
+  mechanics: HP x1.75, +1 блок. Потребує Metamorphosis (забирає її).
+Iron Heart [KeysCards (Keys)/Common] base=2.84 special=- risk=none
+  unmapped: {}
+  mechanics: HP x1.5, рух x1.2, +15 регенерації, +0.4 вампіризм. Потребує Metamorphosis (забирає її).
+Iron Pincers [KeysCards (Keys)/Common] base=2.33 special=- risk=none
+  unmapped: {"bulletSpeedMult": 1.3}
+  mechanics: x1.6 шкода, постріл x0.77, швидкість кулі x1.3, +4 набої. Потребує Metamorphosis (забирає її).
+LEECH [Vanilla/Common] base=2.16 special=- risk=none
+  unmapped: {}
+  mechanics: +75% вампіризм, +30% HP.
+LIFESTEALER [Vanilla/Rare] base=1.76 special=- risk=low
+  unmapped: {"auraRadius": 4, "auraDamage": 5, "auraTickSec": 0.3}
+  mechanics: Аура r4: кожні 0.3 с краде 5 HP у ворога поруч; +25% HP.
+Magic Trick [KeysCards (Keys)/Common] base=-0.15 special=- risk=none
+  unmapped: {"spreadAdd": 0.05}
+  mechanics: +1 куля (розкид 0.05), +3 набої, шкода x0.7, +0.25 с перезарядки.
+MAYHEM [Vanilla/Uncommon] base=1.78 special=- risk=medium
+  unmapped: {}
+  mechanics: +5 відскоків, шкода x0.85, +0.5 с перезарядки.
+Mending Reload [KeysCards (Keys)/Common] base=0.70 special=- risk=none
+  unmapped: {"healOnReloadFlat": 12, "healOnReloadPctMaxHp": 1.5}
+  mechanics: HP x1.2, перезарядка x0.85; кожна перезарядка лікує 12 + 1.5% макс. HP.
+Merlins Staff [KeysCards (Keys)/Treasure] base=0.90 special=- risk=none
+  unmapped: {"knockbackMult": 1.4, "spreadAdd": 0.15, "burstsAdd": 3, "bulletGravityMult": 0}
+  mechanics: Черга з 3 куль, +9 набоїв, гравітація кулі 0, відкидка x1.4, розкид 0.15.
+Metamorphosis [KeysCards (Keys)/Uncommon] base=0.98 special=- risk=none
+  unmapped: {}
+  mechanics: x1.06 шкода, x1.06 HP, +1.2 регенерації (текст: +0.6). Відкриває Iron-картки.
+Mirror [KeysCards (Keys)/Uncommon] base=0.75 special=- risk=low
+  unmapped: {}
+  mechanics: Кулдаун блоку x0.5, HP x0.7.
+Moonwalker [KeysCards (Keys)/Uncommon] base=1.17 special=- risk=medium
+  unmapped: {"jumpMult": 1.2, "playerGravityMult": 0.162, "bulletGravityMult": 0.162, "bulletSpeedMult": 0.8}
+  mechanics: Гравітація гравця і кулі x0.162; x1.35 шкода; рух x0.8, стрибок x1.2, швидкість кулі x0.8.
+Mortar [RSCards (RS_Mind)/Rare] base=1.77 special=- risk=medium
+  unmapped: {"bulletGravityMult": 0.0}
+  mechanics: Кожен новий постріл розвертає вже випущені кулі в поточному напрямку прицілу; x1.35 шкода, без гравітації, +0.5 с перезарядки.
+New Sneakers [KeysCards (Keys)/Common] base=0.81 special=- risk=none
+  unmapped: {"jumpMult": 1.1}
+  mechanics: Постріл x0.74, рух x1.15, стрибок x1.1.
+Nimble [KeysCards (Keys)/Common] base=0.72 special=- risk=none
+  unmapped: {"bulletSpeedMult": 1.25}
+  mechanics: Рух x1.1, перезарядка x0.87, постріл x0.83, швидкість кулі x1.25.
+Nimble+ [KeysCards (Keys)/Common] base=0.85 special=- risk=none
+  unmapped: {"automaticCooldownMult": 0.869}
+  mechanics: Рух x1.15, перезарядка x0.83, постріл x0.83; кулдауни Automatic x0.87. Потрібна Automatic-картка.
+Nuclear Reactor [KeysCards (Keys)/Uncommon] base=-0.29 special=- risk=low
+  unmapped: {"automaticCooldownMult": 0.606}
+  mechanics: Кулдауни Automatic x0.606; x0.85 шкода, x0.85 HP. Потрібна Automatic-картка.
+Open Chamber [RSCards (RS_Mind)/Common] base=1.01 special=- risk=none
+  unmapped: {"bulletSpeedMult": 0.85}
+  mechanics: -0.5 с перезарядки, постріл x0.75, швидкість кулі x0.85.
+Overcrit [KeysCards (Keys)/Hidden] base=0.00 special=- risk=none
+  unmapped: {"critChanceAddPct": 25}
+  mechanics: +25% криту; макс. шанс криту 200% (понад 100% — ще x1.5). Відкривається при криті >= 100%.
+Overdrive [KeysCards (Keys)/Uncommon] base=1.27 special=- risk=none
+  unmapped: {"automaticCooldownMult": 0.833}
+  mechanics: Постріл x0.71; кулдауни Automatic x0.83. Потрібна Automatic-картка.
+OVERPOWER [Vanilla/Uncommon] base=1.16 special=- risk=low
+  unmapped: {"effectRadius": 4, "effectDamagePctMaxHp": 15}
+  mechanics: Блок: через 0.5 с вибух r4 на 15% твого макс. HP; +30% HP.
+PARASITE [Vanilla/Uncommon] base=2.65 special=- risk=none
+  unmapped: {}
+  mechanics: Шкода кулі розтягується на 5 с; +50% вампіризм, +25% HP, x1.25 шкода.
+PHOENIX [Vanilla/Rare] base=3.12 special=- risk=none
+  unmapped: {}
+  mechanics: Одне відродження за раунд; HP x0.65.
+Pickpockets Dagger [KeysCards (Keys)/Treasure] base=0.95 special=- risk=none
+  unmapped: {"critChanceAddPct": 50}
+  mechanics: +50% криту, крит +25% шкоди, постріл x0.67, рух x1.1.
+Pipsqueak [KeysCards (Keys)/Rare] base=1.22 special=- risk=low
+  unmapped: {"jumpMult": 1.22, "playerGravityMult": 1.13, "bulletSimSpeedMult": 1.2}
+  mechanics: Розмір x0.75, рух x1.18, стрибок x1.22, гравітація x1.13, HP x0.7, шкода x0.85, постріл x0.75, симуляція кулі x1.2.
+POISON [Vanilla/Common] base=2.03 special=- risk=none
+  unmapped: {}
+  mechanics: x1.7 шкода, розтягнута на 3 с; перезарядка x0.7; -1 набій.
+Precision [KeysCards (Keys)/Common] base=-0.28 special=- risk=none
+  unmapped: {"critChanceAddPct": 50}
+  mechanics: +50% шансу криту (x2 шкоди), постріл x1.15.
+PRISITNE PERSEVERENCE [Vanilla/Rare] base=1.20 special=- risk=none
+  unmapped: {"conditionalHealthMult": 5.0, "hpThreshold": 0.9}
+  mechanics: HP x5, поки здоров'я вище 90%.
+QUICK RELOAD [Vanilla/Uncommon] base=2.41 special=- risk=none
+  unmapped: {}
+  mechanics: Перезарядка x0.3.
+QUICK SHOT [Vanilla/Common] base=-0.18 special=- risk=none
+  unmapped: {"bulletSpeedMult": 2.5}
+  mechanics: x2.5 швидкість кулі.
+RADAR SHOT [Vanilla/Uncommon] base=1.16 special=- risk=low
+  unmapped: {"effectRadius": 12}
+  mechanics: Блок сканує радіус 12 і автоматично стріляє по знайдених ворогах; +30% HP.
+RADIANCE [Vanilla/Rare] base=1.86 special=- risk=low
+  unmapped: {"effectDamage": 4}
+  mechanics: Під час перезарядки випускає сонячні хвилі (4 шкоди), частота росте; +30% HP.
+Raid Boss [KeysCards (Keys)/Rare] base=3.08 special=- risk=medium
+  unmapped: {"playerGravityMult": 0.65, "bulletSimSpeedMult": 0.6}
+  mechanics: HP x3.2, розмір x1.35, рух x0.6, гравітація гравця x0.65, x1.3 шкода, постріл x1.25, симуляція кулі x0.6.
+Rebound [RSCards (RS_Mind)/Common] base=0.40 special=- risk=none
+  unmapped: {}
+  mechanics: +1 відскок.
+Reckless Attack [RSCards (RS_Mind)/Common] base=1.33 special=- risk=none
+  unmapped: {}
+  mechanics: Постріл x0.5 (удвічі швидше), -0.5 с перезарядки, шкода x0.85.
+Reflection Accelerant [RSCards (RS_Mind)/Rare] base=3.22 special=- risk=low
+  unmapped: {"bulletSpeedMult": 1.25, "speedMultPerBounce": 1.35}
+  mechanics: +2 відскоки, кожен відскок x1.35 швидкості; x1.5 шкода, x1.25 швидкість кулі.
+Refresh [Vanilla/Rare] base=1.20 special=- risk=none
+  unmapped: {"damageNeeded": 10}
+  mechanics: Відновлює блок після 10 нанесеної шкоди.
+Regenerator [RSCards (RS_Mind)/Common] base=0.50 special=- risk=none
+  unmapped: {}
+  mechanics: +10 HP/с регенерації.
+REMOTE [Vanilla/Rare] base=1.02 special=- risk=high
+  unmapped: {"bulletSpeedMult": 0.6}
+  mechanics: Кулями керують правим стиком/мишею. Швидкість кулі x0.6.
+Repentance [RSCards (RS_Mind)/Common] base=0.73 special=- risk=low
+  unmapped: {}
+  mechanics: HP x2, вампіризм -0.5.
+RICCOCHET [Vanilla/Uncommon] base=1.80 special=- risk=low
+  unmapped: {"speedMultPerBounce": 0.5}
+  mechanics: +2 відскоки (втрачають 50% швидкості), постріл x0.75 (швидше).
+SAW [Vanilla/Rare] base=1.76 special=- risk=low
+  unmapped: {"effectDamage": 60, "effectRadius": 4.5, "effectDurationSec": 2}
+  mechanics: Блок на 2 с створює пилку навколо (60 шкоди, радіус 4.5); +30% HP.
+Saw Shot [KeysCards (Keys)/Uncommon] base=0.60 special=- risk=none
+  unmapped: {"autoCooldownSec": 8}
+  mechanics: Кожні 8 с автоматично летить пилка до найближчого ворога (37.5 од/с, 18 + 4*damage шкоди, розмір 2.2, живе 4 с).
+Scaredy Cat [KeysCards (Keys)/Uncommon] base=-0.12 special=- risk=none
+  unmapped: {"triggerRadius": 12, "cond_noEnemyNear_damageMult": 1.5, "cond_noEnemyNear_attackCooldownMult": 0.667, "cond_enemyNear_moveSpeedMult": 1.75}
+  mechanics: HP x0.75. Якщо ворога НЕМАЄ в радіусі 12: x1.5 шкода, постріл x0.67. Якщо є: рух x1.75, стрибок x1.25.
+SCAVENGER [Vanilla/Uncommon] base=0.27 special=- risk=none
+  unmapped: {}
+  mechanics: Нанесення шкоди перезаряджає зброю.
+Sentry [KeysCards (Keys)/Rare] base=1.63 special=- risk=high
+  unmapped: {}
+  mechanics: Блок присівши (вниз) перемикає Sentry Mode: шкода x0.35, постріл x0.18 (у ~5.5 раза частіше), розкид, гравітація x0.2, рух x0.2, стрибок x0.4. Кулдаун блоку x0.75.
+SHIELD CHARGE [Vanilla/Uncommon] base=0.51 special=- risk=high
+  unmapped: {"chargeDamage": 25}
+  mechanics: Блок кидає вперед (ривок 0.2 с), 25 шкоди при зіткненні, потім авто-блок.
+SHIELDS UP [Vanilla/Rare] base=0.69 special=- risk=medium
+  unmapped: {}
+  mechanics: Останній постріл з магазину автоматично блокує; вимикає безперервну перезарядку.
+Shockwave [Vanilla/Uncommon] base=1.52 special=- risk=none
+  unmapped: {"effectRadius": 6.5}
+  mechanics: Блок відштовхує ворогів (сила 30000, радіус 6.5, slow 0.5); +50% HP.
+SILENCE [Vanilla/Uncommon] base=1.07 special=- risk=low
+  unmapped: {"effectRadius": 5, "silenceSec": 3.2, "effectDamage": 10}
+  mechanics: Блок: тиша (не можуть стріляти/блокувати) 3.2 с + 10 шкоди в радіусі 5; +25% HP.
+Slow Start [KeysCards (Keys)/Uncommon] base=0.60 special=- risk=none
+  unmapped: {"cond_afterSec": 12, "cond_damageMult": 1.5, "cond_attackSpeedBonusPct": 30, "cond_moveSpeedBonusPct": 20}
+  mechanics: Через 12 с після старту раунду: x1.5 шкода, +30% швидкості атаки, +20% руху до кінця раунду.
+Slug [RSCards (RS_Mind)/Common] base=2.08 special=- risk=none
+  unmapped: {"bulletSpeedMult": 0.75}
+  mechanics: x2 шкода, швидкість кулі x0.75.
+SNEAKY [Vanilla/Uncommon] base=0.42 special=- risk=none
+  unmapped: {}
+  mechanics: Кулі облітають землю (DodgeGround).
+Snipers Nest [KeysCards (Keys)/Rare] base=1.60 special=- risk=low
+  unmapped: {"bulletSpeedMult": 2.5, "bulletGravityMult": 0.4, "setsMaxAmmoTo": 1, "damageAddPerLostAmmo": 0.14}
+  mechanics: Магазин стає 1 набій; +0.14 шкоди за кожен втрачений набій; x1.35 шкода, x2.5 швидкість кулі, гравітація x0.4, перезарядка x1.4.
+Spare Shotgun [RSCards (RS_Mind)/Uncommon] base=0.60 special=- risk=high
+  unmapped: {}
+  mechanics: Дає другу зброю — шотган (3 кулі, шкода x0.4, швидкість x3.5, магазин 8); перемикання Q/E (WeaponsManager).
+Spellbound [KeysCards (Keys)/Uncommon] base=0.60 special=- risk=none
+  unmapped: {"hexStacksPerHit": 3}
+  mechanics: Кулі накладають 3 Hex (кожен — 1% макс. HP за 6 с).
+Split [RSCards (RS_Mind)/Common] base=-0.13 special=- risk=none
+  unmapped: {}
+  mechanics: +3 набої, -0.5 с перезарядки, шкода x0.75.
+SPRAY [Vanilla/Uncommon] base=2.26 special=- risk=low
+  unmapped: {"spreadAdd": 0.1, "recoilMult": 0.25}
+  mechanics: Кулемет: постріл x0.09 (у ~11 разів частіше), +12 набоїв, шкода x0.25, розкид.
+STATIC FIELD [Vanilla/Uncommon] base=0.51 special=- risk=low
+  unmapped: {"effectRadius": 3, "effectSlow": 0.85, "effectDurationSec": 4.5}
+  mechanics: Блок створює поле r3 на ~4.5 с, яке сповільнює (0.85) і завдає шкоди ворогам у ньому.
+STEADY SHOT [Vanilla/Common] base=0.66 special=- risk=none
+  unmapped: {"bulletSpeedMult": 2.0}
+  mechanics: +40% HP, x2 швидкість кулі.
+SUPERNOVA [Vanilla/Rare] base=2.04 special=- risk=low
+  unmapped: {"pullRadius": 7, "effectRadius": 12, "effectDamage": 30}
+  mechanics: Блок: поле r7 тягне ворогів 2.1 с, потім вибух r12 (30 шкоди, slow); +50% HP.
+TACTICAL RELOAD [Vanilla/Rare] base=1.11 special=- risk=none
+  unmapped: {}
+  mechanics: Блок перезаряджає зброю.
+TANK [Vanilla/Common] base=0.95 special=- risk=none
+  unmapped: {}
+  mechanics: HP x2, постріл x1.25 (повільніше), +0.5 с перезарядки.
+Target BOUNCE [Vanilla/Uncommon] base=0.15 special=- risk=none
+  unmapped: {}
+  mechanics: +1 відскок, після відскоку куля летить у видиму ціль; шкода x0.8.
+TASTE OF BLOOD [Vanilla/Uncommon] base=1.20 special=- risk=none
+  unmapped: {"buffMoveSpeedMult": 1.5, "buffDurationSec": 3}
+  mechanics: +30% вампіризм; 3 с після шкоди: рух x1.5, стрибок x1.25.
+TELEPORT [Vanilla/Rare] base=1.74 special=- risk=high
+  unmapped: {"teleportDistance": 6}
+  mechanics: Блок телепортує вперед на 6 одиниць; кулдаун блоку x0.7.
+The Eggs Blessing [KeysCards (Keys)/Common] base=0.52 special=- risk=none
+  unmapped: {}
+  mechanics: x1.1 шкода, x1.1 HP. Видається з The Golden Egg.
+The Golden Egg [KeysCards (Keys)/Rare] base=1.20 special=- risk=low
+  unmapped: {}
+  mechanics: Через 3 раунди «вилуплюється»: дає набір випадкових карток/скарбів + The Eggs Blessing.
+Thorn Shot [KeysCards (Keys)/Hidden] base=0.00 special=- risk=none
+  unmapped: {}
+  mechanics: Saw Shot: кулдаун 12 с, але пилка розміром 3 і 22 + 6*damage шкоди. Потребує Druids Blessing + Saw Shot.
+THRUSTER [Vanilla/Uncommon] base=0.42 special=- risk=none
+  unmapped: {}
+  mechanics: Кулі мають двигуни, що штовхають ціль (сила 15000).
+TIMED DETONATION [Vanilla/Common] base=-0.66 special=- risk=none
+  unmapped: {"effectDamage": 30, "effectRadius": 4}
+  mechanics: Кулі ставлять бомби, що вибухають через 0.35 с (30 шкоди, радіус 4); шкода x0.85.
+TOXIC CLOUD [Vanilla/Rare] base=-0.36 special=- risk=none
+  unmapped: {"effectRadius": 2.4, "effectDamage": 8, "effectDurationSec": 5.4}
+  mechanics: Кулі створюють отруйну хмару r2.4 на 5.4 с (8 шкоди/тік, slow 0.7). Постріл x1.2, +0.5 с перезарядки.
+Treasure Map [KeysCards (Keys)/Common] base=0.24 special=- risk=low
+  unmapped: {}
+  mechanics: HP x1.1; разом із Compass дає випадковий Скарб.
+Treasure Trove [KeysCards (Keys)/Rare] base=1.20 special=- risk=low
+  unmapped: {}
+  mechanics: Наступний вибір карток складається тільки зі Скарбів (Treasure).
+TRICKSTER [Vanilla/Rare] base=1.00 special=- risk=low
+  unmapped: {"damageMultPerBounce": 1.8}
+  mechanics: +2 відскоки, кожен відскок x1.8 шкоди; базова шкода x0.8.
+Twin Scythe [RSCards (RS_Mind)/Common] base=0.00 special=- risk=none
+  unmapped: {"orbitRadius": 2, "scytheDamage": 95}
+  mechanics: Навколо гравця обертається коса (радіус орбіти 2): 95 шкоди x2^(n-1), знищує кулі. Макс. 4 коси.
+Vampiric Block [KeysCards (Keys)/Rare] base=3.28 special=- risk=high
+  unmapped: {"selfDamagePctMaxHpPerExtraBlock": 8}
+  mechanics: Кулдаун блоку x0.25; після 3 блоків поспіль кожен наступний блок забирає 8% макс. HP x (стаки-3), скидається за 3 с без блоку.
+Warpath [KeysCards (Keys)/Uncommon] base=0.74 special=- risk=none
+  unmapped: {"damagePerBonusMoveSpeed": 1.3}
+  mechanics: Рух x1.1; шкода x(1 + 1.3*(рух-1)) за бонус швидкості руху.
+WIND UP [Vanilla/Common] base=-0.31 special=- risk=none
+  unmapped: {"bulletSpeedMult": 2.0}
+  mechanics: x1.6 шкода, x2 швидкість кулі, постріл удвічі рідше, +0.5 с перезарядки.
+Zephyrs Blessing [KeysCards (Keys)/Treasure] base=1.87 special=- risk=medium
+  unmapped: {"playerGravityMult": 0.7, "cond_inAir_damageBonusPct": 40, "cond_inAir_attackSpeedBonusPct": 40}
+  mechanics: +2 стрибки, гравітація гравця x0.7, рух x1.2; у повітрі +40% шкоди і швидкості атаки.
