@@ -15,7 +15,7 @@ namespace RoundsBots
     {
         public const string ModId = "com.kanty.rounds.bots";
         public const string ModName = "BotsAI";
-        public const string ModVersion = "0.5.3";
+        public const string ModVersion = "0.5.4";
 
         internal static ManualLogSource Log { get; private set; }
 
@@ -42,6 +42,7 @@ namespace RoundsBots
             {
                 DamageTracker.RegisterHooks();
                 TransitionDiagnostics.RegisterHooks();
+                UnboundLib.GameModes.GameModeManager.AddHook(UnboundLib.GameModes.GameModeHooks.HookPointStart, handler => NavMap.OnPointStart());
             }
             catch (System.Exception ex)
             {

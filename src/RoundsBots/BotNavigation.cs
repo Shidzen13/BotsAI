@@ -64,7 +64,10 @@ namespace RoundsBots
         private const float FellBelow = 2.5f;
 
         /// <summary>Поточна спроба кроку маршруту: щоб помітити, що він не вдається, і запам'ятати це для карти.</summary>
-        private (int fx, int fy, int tx, int ty, NavMove move, float at, float lowY)? attempt;
+        private (int fx, int fy, int tx, int ty, NavMove move, float at, float lowY, int generation)? attempt;
+        private float airborneSince = float.NegativeInfinity;
+        private static readonly HarmonyLib.AccessTools.FieldRef<PlayerVelocity, Vector2> Velocity =
+            HarmonyLib.AccessTools.FieldRefAccess<PlayerVelocity, Vector2>("velocity");
         private int lastOutput;
         private float lastFlipAt = float.NegativeInfinity;
 
@@ -79,6 +82,9 @@ namespace RoundsBots
             lastX = data.transform.position.x;
             lastThinkTime = Time.time;
             stuckTimer = 0f;
+            attempt = null;       // смерть, пауза, вибір карток — незавершена спроба не рахується невдачею
+            plannedStep = null;
+            gapJumpDirection = 0;
         }
 
         /// <summary>Повертає горизонтальний напрямок (-1/0/1) і чи треба стрибнути.</summary>
@@ -196,9 +202,16 @@ namespace RoundsBots
                 plannedStep = null; // блок витрачено — відскок коштуватиме 51 HP, рятуємося на опору
             }
 
-            bool committedRouteJump = plannedStep.HasValue
-                && (plannedStep.Value.Move == NavMove.Jump || plannedStep.Value.Move == NavMove.Fall)
-                && Time.time - plannedAt < CommitSeconds(plannedStep.Value.Move);
+            bool committedRouteJump = false;
+            if (plannedStep.HasValue && (plannedStep.Value.Move == NavMove.Jump || plannedStep.Value.Move == NavMove.Fall))
+            {
+                // Вікно довіри — від відриву, а не від рішення стрибати (розбіг його з'їдав). Уже падаємо і попереду
+                // по дорозі до цілі кроку опори немає — стрибок провалено, рятуємося.
+                float since = Time.time - Mathf.Max(plannedAt, airborneSince);
+                int toLanding = NavMap.ToWorld(plannedStep.Value.X, plannedStep.Value.Y).x > myPosition.x ? 1 : -1;
+                bool rising = data.playerVel != null && Velocity(data.playerVel).y > 0f;
+                committedRouteJump = since < CommitSeconds(plannedStep.Value.Move) && (rising || HasLandingAhead(myPosition, toLanding));
+            }
             bool landingAhead = gapJumpDirection != 0 && HasLandingAhead(myPosition, gapJumpDirection);
             int? keepGoing = BotMath.GapJumpEscape(committedRouteJump, gapJumpDirection, Time.time - gapJumpAt, landingAhead);
             if (keepGoing.HasValue)
@@ -468,6 +481,11 @@ namespace RoundsBots
             jump = false;
 
             bool airborne = !data.isGrounded && !data.isWallGrab;
+            if (airborne && !airborneNow)
+            {
+                airborneSince = Time.time; // відрив від землі — з нього рахуємо вікно довіри стрибку
+            }
+
             airborneNow = airborne;
             if (!airborne)
             {
@@ -605,7 +623,14 @@ namespace RoundsBots
             }
 
             float lowY = Mathf.Min(NavMap.ToWorld(sx, sy).y, NavMap.ToWorld(next.X, next.Y).y) - FellBelow;
-            attempt = (sx, sy, next.X, next.Y, next.Move, Time.time, lowY);
+            attempt = (sx, sy, next.X, next.Y, next.Move, Time.time, lowY, NavMap.Generation);
+        }
+
+        /// <summary>Рядок JUMP ok/fail — справжня частка провалів стрибків і їхня довжина.</summary>
+        private void LogJump(string result, int fx, int fy, int tx, int ty, NavMove move, float startedAt)
+        {
+            BotLog.Write(System.FormattableString.Invariant(
+                $"JUMP {result} bot={data.player.playerID} move={move} dx={tx - fx} dy={ty - fy} t={Time.time - startedAt:0.00}"));
         }
 
         /// <summary>Дійшли — успіх; впали нижче за обидві клітинки або не дійшли за таймаут — невдача, штраф переходу.</summary>
@@ -617,6 +642,12 @@ namespace RoundsBots
             }
 
             var a = attempt.Value;
+            if (a.generation != NavMap.Generation || data.dead)
+            {
+                attempt = null; // нове очко/мапа або смерть — спроба не оцінюється
+                return;
+            }
+
             if (data.healthHandler != null && LastDamaged(data.healthHandler) >= a.at)
             {
                 attempt = null; // збила куля — маршрут не винен
@@ -625,6 +656,12 @@ namespace RoundsBots
 
             if (sx == a.tx && sy == a.ty)
             {
+                if (a.move == NavMove.Jump || a.move == NavMove.Fall)
+                {
+                    NavMap.ReportSuccess(a.fx, a.fy, a.tx, a.ty);
+                    LogJump("ok", a.fx, a.fy, a.tx, a.ty, a.move, a.at);
+                }
+
                 attempt = null; // вдалося
                 return;
             }
@@ -635,7 +672,17 @@ namespace RoundsBots
                 : CommitSeconds(a.move) + 1f);
             if (fell || timedOut)
             {
-                NavMap.ReportFailure(a.fx, a.fy, a.tx, a.ty, $"{a.move}{(fell ? "/fell" : "/timeout")}");
+                string why = fell ? "fell" : "timeout";
+                if (BotMath.ShouldPenalise(a.move, fell))
+                {
+                    NavMap.ReportFailure(a.fx, a.fy, a.tx, a.ty, $"{a.move}/{why}");
+                }
+
+                if (a.move == NavMove.Jump || a.move == NavMove.Fall)
+                {
+                    LogJump("fail/" + why, a.fx, a.fy, a.tx, a.ty, a.move, a.at);
+                }
+
                 attempt = null;
                 return;
             }

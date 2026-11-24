@@ -37,53 +37,76 @@ namespace RoundsBots
         private static MapWrapper dumpedFor;
         private static bool hasMovables;
 
-        private const float FailurePenalty = 8f;
+        /// <summary>Вивчені «погані» переходи по картах (<see cref="EdgeLearning"/>): лише справжні падіння, зі згасанням.</summary>
+        private static readonly System.Collections.Generic.Dictionary<string, EdgeLearning> Learned =
+            new System.Collections.Generic.Dictionary<string, EdgeLearning>();
 
-        /// <summary>Вивчені «погані» переходи по картах: бот пробував і не зміг. Живе до кінця гри.</summary>
-        private static readonly System.Collections.Generic.Dictionary<string, System.Collections.Generic.List<(int fx, int fy, int tx, int ty)>> Learned =
-            new System.Collections.Generic.Dictionary<string, System.Collections.Generic.List<(int, int, int, int)>>();
+        /// <summary>Номер очка/карти: спроба кроку з минулого очка не оцінюється (смерть, вибір карток, нова мапа).</summary>
+        public static int Generation { get; private set; }
 
-        /// <summary>Перехід from→to не вдався — штраф на цій карті (і в поточній сітці одразу).</summary>
-        public static void ReportFailure(int fromX, int fromY, int toX, int toY, string move)
+        private static EdgeLearning LearningForCurrentMap()
         {
             string map = CurrentMapName() ?? "unknown";
-            if (!Learned.TryGetValue(map, out var list))
+            if (!Learned.TryGetValue(map, out var learning))
             {
-                list = new System.Collections.Generic.List<(int, int, int, int)>();
-                Learned[map] = list;
+                learning = new EdgeLearning();
+                Learned[map] = learning;
             }
 
-            // Схожі переходи (сусідні клітинки старту й цілі) теж штрафуємо — інакше бот пробує майже той самий стрибок.
-            for (int dx = -1; dx <= 1; dx++)
+            return learning;
+        }
+
+        /// <summary>Перехід from→to закінчився падінням — штраф на цій карті (і в поточній сітці одразу).</summary>
+        public static void ReportFailure(int fromX, int fromY, int toX, int toY, string move)
+        {
+            EdgeLearning learning = LearningForCurrentMap();
+            foreach ((int fx, int fy, int tx, int ty) in learning.RecordFailure(fromX, fromY, toX, toY))
             {
-                for (int dy = -1; dy <= 1; dy++)
+                if (IsInside(fx, fy) && IsInside(tx, ty))
                 {
-                    for (int ex = -1; ex <= 1; ex++)
-                    {
-                        for (int ey = -1; ey <= 1; ey++)
-                        {
-                            (int, int, int, int) edge = (fromX + dx, fromY + dy, toX + ex, toY + ey);
-                            if (IsInside(edge.Item1, edge.Item2) && IsInside(edge.Item3, edge.Item4))
-                            {
-                                list.Add(edge);
-                                grid?.AddPenalty(edge.Item1, edge.Item2, edge.Item3, edge.Item4, FailurePenalty);
-                            }
-                        }
-                    }
+                    grid?.SetPenalty(fx, fy, tx, ty, learning.PenaltyOf(fx, fy, tx, ty));
                 }
             }
-            BotLog.Write($"LEARN fail {move} ({fromX},{fromY})->({toX},{toY}) edges={list.Count}");
+
+            BotLog.Write($"LEARN fail {move} ({fromX},{fromY})->({toX},{toY}) penalty={learning.PenaltyOf(fromX, fromY, toX, toY):0.#} edges={learning.Count}");
+        }
+
+        /// <summary>Перехід удався — знімаємо його штраф.</summary>
+        public static void ReportSuccess(int fromX, int fromY, int toX, int toY)
+        {
+            if (Learned.TryGetValue(CurrentMapName() ?? "unknown", out var learning) && learning.RecordSuccess(fromX, fromY, toX, toY))
+            {
+                grid?.SetPenalty(fromX, fromY, toX, toY, 0f);
+                BotLog.Write($"LEARN ok ({fromX},{fromY})->({toX},{toY}) penalty cleared");
+            }
+        }
+
+        /// <summary>Нове очко: штрафи згасають (×0.5), старі спроби більше не оцінюються.</summary>
+        public static System.Collections.IEnumerator OnPointStart()
+        {
+            Generation++;
+            foreach (EdgeLearning learning in Learned.Values)
+            {
+                learning.Decay();
+            }
+
+            grid = null;
+            yield break;
         }
 
         private static bool IsInside(int x, int y) => x >= 0 && y >= 0 && x < Width && y < Height;
 
         private static void ApplyLearned(NavGrid built)
         {
-            if (Learned.TryGetValue(CurrentMapName() ?? "unknown", out var list))
+            if (Learned.TryGetValue(CurrentMapName() ?? "unknown", out var learning))
             {
-                foreach ((int fx, int fy, int tx, int ty) in list)
+                foreach (var entry in learning.All)
                 {
-                    built.AddPenalty(fx, fy, tx, ty, FailurePenalty);
+                    (int fx, int fy, int tx, int ty) = entry.Key;
+                    if (IsInside(fx, fy) && IsInside(tx, ty))
+                    {
+                        built.SetPenalty(fx, fy, tx, ty, entry.Value);
+                    }
                 }
             }
         }

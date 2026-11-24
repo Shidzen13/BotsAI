@@ -54,7 +54,9 @@ namespace RoundsBots
         private static string RoomText()
         {
             string bots = OnlineBots.BotsSummary.Length > 0 ? $"\n<b>Bots:</b> {OnlineBots.BotsSummary}" : string.Empty;
-            string text = "<b>BotsAI</b>\nB - add bot (up to 4)   N - remove bot\n1-4 - next color for bot #N   Shift+1-4 - previous color" + bots + "\n" +
+            int maxBots = Mathf.Max(0, OnlineSolo.ConfiguredLimit - 1);
+            string text = $"<b>BotsAI</b>\nB - add bot (Bots: {OnlineBots.LocalBots.Length}/{maxBots})   N - remove bot\n" +
+                "1-4 - next color for bot #N   Shift+1-4 - previous color" + bots + "\n" +
                 $"<size=12>Teams only in Team Deathmatch. Characters per PC: {OnlineSolo.ConfiguredLimit}</size>";
             if (!OnlineSolo.PeersCompatible(out string problem))
             {

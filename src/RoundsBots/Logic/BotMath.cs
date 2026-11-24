@@ -231,6 +231,12 @@ namespace RoundsBots.Logic
             return Math.Max(MinPreferredDistance, distance);
         }
 
+        /// <summary>Штрафуємо перехід лише за справжнє падіння зі стрибка чи зіскоку (таймаут і ходьба — тільки в лог).</summary>
+        public static bool ShouldPenalise(NavMove move, bool fell)
+        {
+            return fell && (move == NavMove.Jump || move == NavMove.Fall);
+        }
+
         /// <summary>Скільки секунд після відриву бот довіряє своєму стрибку через прірву.</summary>
         public const float GapJumpTrustSeconds = 1.5f;
 

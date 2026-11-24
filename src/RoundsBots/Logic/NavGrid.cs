@@ -149,6 +149,20 @@ namespace RoundsBots.Logic
             penalties[key] = (penalties.TryGetValue(key, out float old) ? old : 0f) + penalty;
         }
 
+        /// <summary>Задати штраф переходу (0 — прибрати).</summary>
+        public void SetPenalty(int fromX, int fromY, int toX, int toY, float penalty)
+        {
+            long key = EdgeKey(Index(fromX, fromY), Index(toX, toY));
+            if (penalty <= 0f)
+            {
+                penalties.Remove(key);
+            }
+            else
+            {
+                penalties[key] = penalty;
+            }
+        }
+
         public float PenaltyOf(int fromX, int fromY, int toX, int toY)
         {
             return penalties.TryGetValue(EdgeKey(Index(fromX, fromY), Index(toX, toY)), out float value) ? value : 0f;
