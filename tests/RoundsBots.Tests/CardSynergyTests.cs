@@ -42,4 +42,18 @@ public sealed class CardSynergyTests
         Assert.Equal(0f, CardSynergy.Adjustment("HUGE", new[] { "POISON", "ECHO" }));
         Assert.Equal(0f, CardSynergy.Adjustment(null, new[] { "POISON" }));
     }
+
+    [Fact]
+    public void PipsqueakAndRaidBossCancelEachOthersSize()
+    {
+        Assert.Equal(0.7f, CardSynergy.Adjustment("RAID BOSS", new[] { "Pipsqueak" }), 3);
+        Assert.Equal(0.7f, CardSynergy.Adjustment("PIPSQUEAK", new[] { "RAID BOSS" }), 3);
+    }
+
+    [Fact]
+    public void PristinePerseverenceJoinsTankCombo()
+    {
+        Assert.Equal(0.5f, CardSynergy.Adjustment("PRISITNE PERSEVERENCE", new[] { "RAID BOSS", "PIPSQUEAK" }), 3);
+        Assert.Equal(1.2f, CardSynergy.Adjustment("RAID BOSS", new[] { "PIPSQUEAK", "Prisitne Perseverence" }), 3);
+    }
 }

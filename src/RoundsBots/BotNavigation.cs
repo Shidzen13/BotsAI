@@ -196,6 +196,16 @@ namespace RoundsBots
                 plannedStep = null; // блок витрачено — відскок коштуватиме 51 HP, рятуємося на опору
             }
 
+            bool committedRouteJump = plannedStep.HasValue
+                && (plannedStep.Value.Move == NavMove.Jump || plannedStep.Value.Move == NavMove.Fall)
+                && Time.time - plannedAt < CommitSeconds(plannedStep.Value.Move);
+            bool landingAhead = gapJumpDirection != 0 && HasLandingAhead(myPosition, gapJumpDirection);
+            int? keepGoing = BotMath.GapJumpEscape(committedRouteJump, gapJumpDirection, Time.time - gapJumpAt, landingAhead);
+            if (keepGoing.HasValue)
+            {
+                return keepGoing.Value;
+            }
+
             for (int distance = 1; distance <= VoidSearchRadius; distance++)
             {
                 bool right = data.ThereIsGroundBelow(myPosition + Vector2.right * distance, SafeDropDepth);
@@ -218,6 +228,9 @@ namespace RoundsBots
         }
 
         private bool CanJumpInAir => data.isWallGrab || data.currentJumps > 0;
+
+        private int gapJumpDirection;
+        private float gapJumpAt = -10f;
 
         /// <summary>Узятий відскок, але ще не відскочили від низу — падаємо колоною.</summary>
         private bool FallingToBounce => plannedStep.HasValue && plannedStep.Value.Move == NavMove.Bounce && !bounced;
@@ -280,6 +293,8 @@ namespace RoundsBots
                 else if (HasLandingAhead(myPosition, horizontal))
                 {
                     jump = true; // перестрибуємо прірву
+                    gapJumpDirection = horizontal;
+                    gapJumpAt = Time.time;
                 }
                 else
                 {

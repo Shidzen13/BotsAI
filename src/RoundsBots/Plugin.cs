@@ -15,7 +15,7 @@ namespace RoundsBots
     {
         public const string ModId = "com.kanty.rounds.bots";
         public const string ModName = "BotsAI";
-        public const string ModVersion = "0.5.2";
+        public const string ModVersion = "0.5.3";
 
         internal static ManualLogSource Log { get; private set; }
 

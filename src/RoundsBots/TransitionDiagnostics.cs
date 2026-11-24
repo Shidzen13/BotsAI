@@ -22,6 +22,13 @@ namespace RoundsBots
             GameModeManager.AddHook(GameModeHooks.HookPickEnd, handler => Watch("PickEnd"));
             GameModeManager.AddHook(GameModeHooks.HookPointEnd, handler => Watch("PointEnd"));
             GameModeManager.AddHook(GameModeHooks.HookPointStart, handler => MarkStarted());
+            GameModeManager.AddHook(GameModeHooks.HookPickStart, handler => CancelWatch()); // вибір карток — не зависання
+        }
+
+        private static IEnumerator CancelWatch()
+        {
+            transition++;
+            yield break;
         }
 
         private static IEnumerator MarkStarted()

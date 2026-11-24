@@ -40,6 +40,8 @@ namespace RoundsBots.Logic
             ("SHIELDS UP", new[] { "RADAR SHOT" }, 0.6f),         // Шидзен: блок-збірка (ПКМ)
             ("PARASITE", new[] { "POISON" }, 0.5f),               // Шидзен: шкода з часом стакається
             ("LEECH", new[] { "POISON", "PARASITE" }, 0.4f),      // лікування від шкоди з часом
+            ("PIPSQUEAK", new[] { "RAID BOSS" }, 0.7f),
+            ("PRISITNE PERSEVERENCE", new[] { "RAID BOSS", "PIPSQUEAK" }, 0.5f), // Шидзен: +400% HP поки HP >90% — до великого запасу HP           // Шидзен: розмір ~x1, HP x2.24 — мінус Raid Boss (велика ціль) зникає
             ("PRECISION", Crits, 0.3f),
             ("PICKPOCKETS DAGGER", Crits, 0.3f),
         };

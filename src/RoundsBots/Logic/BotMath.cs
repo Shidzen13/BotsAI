@@ -230,5 +230,30 @@ namespace RoundsBots.Logic
 
             return Math.Max(MinPreferredDistance, distance);
         }
+
+        /// <summary>Скільки секунд після відриву бот довіряє своєму стрибку через прірву.</summary>
+        public const float GapJumpTrustSeconds = 1.5f;
+
+        /// <summary>
+        /// Над порожнечею під час стрибка через прірву: чи не розвертати бота до найближчої опори.
+        /// Одразу після відриву найближча опора — край, з якого стрибнули, тож «рятувальник» повертав бота назад
+        /// (гра з другом 2026-11-23: «намагаються перестрибнути, але бояться і повертаються»).
+        /// Повертає: null — звичайний порятунок до найближчої опори; 0 — не втручатися (веде узятий крок маршруту);
+        /// ±1 — летіти далі в бік стрибка.
+        /// </summary>
+        public static int? GapJumpEscape(bool committedRouteJump, int gapJumpDirection, float sinceGapJump, bool landingAhead)
+        {
+            if (committedRouteJump)
+            {
+                return 0;
+            }
+
+            if (gapJumpDirection != 0 && sinceGapJump >= 0f && sinceGapJump < GapJumpTrustSeconds && landingAhead)
+            {
+                return gapJumpDirection;
+            }
+
+            return null;
+        }
     }
 }

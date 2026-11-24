@@ -38,6 +38,24 @@ public sealed class RwbIdeasTests
         Assert.True(miss < 0.5f);
     }
 
+    [Theory]
+    [InlineData(true, 0, 9f, false, 0)]     // узятий стрибок маршруту — рятувальник не втручається
+    [InlineData(false, 1, 0.4f, true, 1)]   // щойно стрибнули через прірву, попереду є опора — летимо далі
+    [InlineData(false, -1, 0.4f, true, -1)]
+    public void GapJumpEscape_KeepsJumpGoing(bool committed, int dir, float since, bool landing, int expected)
+    {
+        Assert.Equal(expected, BotMath.GapJumpEscape(committed, dir, since, landing));
+    }
+
+    [Theory]
+    [InlineData(false, 1, 0.4f, false)] // попереду опори немає — рятуємося як раніше
+    [InlineData(false, 1, 2.0f, true)]  // стрибок давно — звичайний порятунок
+    [InlineData(false, 0, 0.1f, true)]  // не стрибали через прірву
+    public void GapJumpEscape_FallsBackToNearestGround(bool committed, int dir, float since, bool landing)
+    {
+        Assert.Null(BotMath.GapJumpEscape(committed, dir, since, landing));
+    }
+
     [Fact]
     public void BulletSim_NeededOnlyWithDragOrSpeedChange()
     {

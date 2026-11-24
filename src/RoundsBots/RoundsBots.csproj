@@ -8,7 +8,7 @@
     <Nullable>disable</Nullable>
     <AssemblyName>RoundsBots</AssemblyName>
     <RootNamespace>RoundsBots</RootNamespace>
-    <Version>0.5.2</Version>
+    <Version>0.5.3</Version>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
 
