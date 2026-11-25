@@ -57,10 +57,13 @@ namespace RoundsBots.Logic
 
         /// <param name="clearance">Скільки вільних клітинок треба над опорою, щоб пройти (зріст гравця в клітинках).</param>
         /// <param name="jumps">Скільки стрибків у ботів: кожен додатковий (подвійний) дає ще <see cref="ExtraJumpUp"/> клітинок висоти.</param>
-        public NavGrid(bool[,] solid, int clearance = 2, int jumps = 1, bool[,] breakable = null)
+        /// <param name="boxCells">Клітинки, де на цій карті будь-коли стояли коробки (зокрема вже розбиті) — лише крізь
+        /// них дозволено прямий високий стрибок; null = поточні <paramref name="breakable"/>.</param>
+        public NavGrid(bool[,] solid, int clearance = 2, int jumps = 1, bool[,] breakable = null, bool[,] boxCells = null)
         {
             this.solid = solid ?? throw new ArgumentNullException(nameof(solid));
             this.breakable = breakable;
+            this.boxCells = boxCells ?? breakable;
             JumpUp = JumpHeightFor(jumps);
             Clearance = Math.Max(1, clearance);
             Width = solid.GetLength(0);
@@ -71,6 +74,7 @@ namespace RoundsBots.Logic
         public int Clearance { get; }
 
         private readonly bool[,] breakable;
+        private readonly bool[,] boxCells;
 
         public const int MaxBreakThickness = 5;
         public const float BreakCost = 20f;
@@ -744,7 +748,7 @@ namespace RoundsBots.Logic
         private void AddBreakThroughs(int x, int y, List<(int, NavMove, float)> list)
         {
             int bottom = -1;
-            for (int h = y + 1; h <= y + JumpUp + BreakExtraRise && h < Height; h++)
+            for (int h = y + 1; h <= y + Math.Min(JumpUp + BreakExtraRise, MaxTotalJumpUp) && h < Height; h++)
             {
                 if (IsSolid(x, h))
                 {
@@ -762,7 +766,7 @@ namespace RoundsBots.Logic
                 }
 
                 int land = top + 1;
-                if (top - bottom < MaxBreakThickness && land - y <= JumpUp + BreakExtraRise && IsFree(x, land + Clearance - 1))
+                if (top - bottom < MaxBreakThickness && land - y <= Math.Min(JumpUp + BreakExtraRise, MaxTotalJumpUp) && IsFree(x, land + Clearance - 1))
                 {
                     foreach (int dx in new[] { -1, 1 })
                     {
@@ -799,6 +803,11 @@ namespace RoundsBots.Logic
         /// </summary>
         private void AddStraightUpJumps(int x, int y, List<(int, NavMove, float)> list)
         {
+            if (boxCells == null)
+            {
+                return;
+            }
+
             for (int h = y + 1; h <= y + JumpUp + Clearance - 1; h++)
             {
                 if (h >= Height || IsSolid(x, h))
@@ -807,11 +816,17 @@ namespace RoundsBots.Logic
                 }
             }
 
-            for (int land = y + JumpUp + 1; land <= y + JumpUp + BreakExtraRise && land + Clearance - 1 < Height; land++)
+            int maxLand = y + Math.Min(JumpUp + BreakExtraRise, MaxTotalJumpUp);
+            for (int land = y + JumpUp + 1; land <= maxLand && land + Clearance - 1 < Height; land++)
             {
                 if (IsSolid(x, land + Clearance - 1) || IsSolid(x, land - 1))
                 {
                     return;
+                }
+
+                if (!WasBoxColumn(x, y + 1, land))
+                {
+                    continue;
                 }
 
                 foreach (int dx in new[] { -1, 1 })
@@ -822,6 +837,20 @@ namespace RoundsBots.Logic
                     }
                 }
             }
+        }
+
+        /// <summary>Чи стояла коробка в колоні x між рядами from..to (отвір, пробитий у стелі).</summary>
+        private bool WasBoxColumn(int x, int from, int to)
+        {
+            for (int h = Math.Max(0, from); h <= to && h < Height; h++)
+            {
+                if (boxCells[x, h])
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public const int MaxHopWallWidth = 3;

@@ -161,4 +161,80 @@ public sealed class BreakThroughTests
         NavGrid opened = RealMapTests.LoadWith(map, 1, 1, removed: (x, y) => x >= 49 && x <= 52 && (y == 7 || y == 8));
         Assert.NotEmpty(opened.FindPath(sx, sy, 53, 9));
     }
+
+    [Fact]
+    public void AllBoxesBroken_RouteUpStillExists_df5a7cb2()
+    {
+        // ШІ-чат 0.5.6: після того як усі коробки розбиті, маршрут угору має лишитися (без цього не випускаємо).
+        NavGrid broken = RealMapTests.LoadWith("df5a7cb2-e7c1-489b-9992-63591e8401c5.txt", 1, 1, brokenBoxes: true);
+        broken.TryFindStandable(50, 3, out int sx, out int sy);
+        broken.TryFindStandable(23, 28, out int gx, out int gy);
+        Assert.NotEmpty(broken.FindPath(sx, sy, gx, gy));
+    }
+
+    [Fact]
+    public void BrokenCeiling_HasNoBreakCellLeft()
+    {
+        NavGrid opened = RealMapTests.LoadWith("df5a7cb2-e7c1-489b-9992-63591e8401c5.txt", 1, 1, breakables: true,
+            removed: (x, y) => x >= 49 && x <= 52 && (y == 7 || y == 8));
+        Assert.False(opened.TryGetBreakCell(52, 2, 53, 9, out _, out _));
+    }
+
+    private static bool[,] ShelfRoom(out int floorY)
+    {
+        // Підлога y=0, полиця праворуч на 7 вище, колона над ботом (x=5) вільна.
+        var solid = new bool[12, 20];
+        for (int x = 0; x < 12; x++)
+        {
+            solid[x, 0] = true;
+        }
+
+        for (int x = 6; x < 12; x++)
+        {
+            solid[x, 7] = true;
+        }
+
+        floorY = 1;
+        return solid;
+    }
+
+    [Fact]
+    public void NoBoxes_NoStraightHighJumpToShelf()
+    {
+        bool[,] solid = ShelfRoom(out int y);
+        var grid = new NavGrid(solid, 1, 1);
+        Assert.Empty(grid.FindPath(5, y, 6, 8));
+    }
+
+    [Fact]
+    public void OnlyMovablePlate_NoStraightHighJumpToShelf()
+    {
+        bool[,] solid = ShelfRoom(out int y);
+        var noBoxes = new bool[12, 20]; // рухома плита — не коробка
+        var grid = new NavGrid(solid, 1, 1, noBoxes);
+        Assert.Empty(grid.FindPath(5, y, 6, 8));
+    }
+
+    [Fact]
+    public void BrokenBoxInColumn_AllowsStraightHighJump()
+    {
+        bool[,] solid = ShelfRoom(out int y);
+        var boxes = new bool[12, 20];
+        boxes[5, 7] = true; // тут була коробка, тепер отвір
+        var grid = new NavGrid(solid, 1, 1, null, boxes);
+        var path = grid.FindPath(5, y, 6, 8);
+        Assert.NotEmpty(path);
+    }
+}
+
+public sealed class BlockedEdgeTests
+{
+    [Fact]
+    public void RecordBlocked_SetsMaxPenaltyAtOnce()
+    {
+        var learning = new EdgeLearning();
+        Assert.True(learning.RecordBlocked(1, 2, 3, 4));
+        Assert.Equal(EdgeLearning.MaxPenalty, learning.PenaltyOf(1, 2, 3, 4));
+        Assert.Equal(0f, learning.PenaltyOf(0, 2, 2, 4));
+    }
 }

@@ -59,6 +59,14 @@ namespace RoundsBots.Logic
             return changed;
         }
 
+        /// <summary>Перехід непрохідний (коробку не пробили) — одразу <see cref="MaxPenalty"/>, сусідів не чіпаємо.</summary>
+        public bool RecordBlocked(int fx, int fy, int tx, int ty)
+        {
+            var changed = new List<(int, int, int, int)>();
+            Add((fx, fy, tx, ty), MaxPenalty, changed);
+            return changed.Count > 0;
+        }
+
         /// <summary>Перехід удався — штраф знімаємо повністю (сусідів не чіпаємо).</summary>
         public bool RecordSuccess(int fx, int fy, int tx, int ty)
         {

@@ -269,8 +269,10 @@ namespace RoundsBots
             {
                 HandleObstacleAhead(myPosition, horizontal, canShoot: !aiming.HasClearShot && reload <= 0f);
 
-                // Маршрут іде крізь коробки — прострілюємо їх (стеля над головою чи стінка поруч).
-                if (navigation.BreakTarget is Vector2 breakAt && !aiming.HasClearShot && reload <= 0f)
+                // Маршрут іде крізь коробки — прострілюємо їх (стеля над головою чи стінка поруч). Рикошет — не прямий
+                // постріл: з ним теж ламаємо (ШІ-чат 0.5.6), самонаведення поки лишаємо стріляти по ворогу.
+                bool directShot = aiming.HasClearShot && !aiming.LastBankShot;
+                if (navigation.BreakTarget is Vector2 breakAt && !directShot && reload <= 0f)
                 {
                     aimDirection = (breakAt - myPosition).normalized;
                     shooting = true;

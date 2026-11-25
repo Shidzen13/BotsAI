@@ -503,6 +503,7 @@ namespace RoundsBots
             jump = false;
 
             bool airborne = !data.isGrounded && !data.isWallGrab;
+            attemptApexY = Mathf.Max(attemptApexY, myPosition.y);
             if (airborne && !airborneNow)
             {
                 airborneSince = Time.time; // відрив від землі — з нього рахуємо вікно довіри стрибку
@@ -642,33 +643,38 @@ namespace RoundsBots
         private float? climbColumnX;
         private int climbWallDirection;
 
-        private const float BreakGiveUpSeconds = 8f;
-        private (int fx, int fy, int tx, int ty) breakEdge = (-1, -1, -1, -1);
+        /// <summary>ШІ-чат 0.5.6: 8 с × повторні спроби тримали бота біля непробивної коробки до 24 с.</summary>
+        private const float BreakGiveUpSeconds = 4f;
+        private const float StraightUpReach = 1.5f;
+        private (int x, int y) breakCell = (-1, -1);
         private float breakSince;
 
         /// <summary>
         /// Крок «пробити»: стоїмо на місці, BotBrain прострілює шар. Коли дірка з'явиться, сітка перебудується, і
-        /// маршрут піде звичайним стрибком/ходьбою. Не пробивається за <see cref="BreakGiveUpSeconds"/> — штраф переходу.
+        /// маршрут піде звичайним стрибком/ходьбою. Таймер — на клітинку-ціль (не на перехід, бо бот трохи зсувається);
+        /// не пробили за <see cref="BreakGiveUpSeconds"/> — перехід отримує найбільший штраф, маршрут іде в обхід.
         /// </summary>
         private bool BeginBreak(NavGrid grid, int sx, int sy, NavStep next, out int horizontal, out bool jump)
         {
             horizontal = 0;
             jump = false;
             plannedStep = null;
-            var edge = (sx, sy, next.X, next.Y);
-            if (edge != breakEdge)
+            BreakTarget = null;
+            bool hasCell = grid.TryGetBreakCell(sx, sy, next.X, next.Y, out int bx, out int by);
+            var cell = hasCell ? (bx, by) : (next.X, next.Y);
+            if (cell != breakCell)
             {
-                breakEdge = edge;
+                breakCell = cell;
                 breakSince = Time.time;
             }
             else if (Time.time - breakSince > BreakGiveUpSeconds)
             {
-                NavMap.ReportFailure(sx, sy, next.X, next.Y, "Break");
+                NavMap.ReportBlocked(sx, sy, next.X, next.Y, "Break");
                 breakSince = Time.time;
                 return true;
             }
 
-            if (grid.TryGetBreakCell(sx, sy, next.X, next.Y, out int bx, out int by))
+            if (hasCell)
             {
                 BreakTarget = NavMap.ToWorld(bx, by);
             }
@@ -758,14 +764,20 @@ namespace RoundsBots
             }
 
             float lowY = Mathf.Min(NavMap.ToWorld(sx, sy).y, NavMap.ToWorld(next.X, next.Y).y) - FellBelow;
+            attemptStartY = data.playerVel != null ? data.playerVel.position.y : NavMap.ToWorld(sx, sy).y;
+            attemptApexY = attemptStartY;
             attempt = (sx, sy, next.X, next.Y, next.Move, Time.time, lowY, NavMap.Generation);
         }
 
-        /// <summary>Рядок JUMP ok/fail — справжня частка провалів стрибків і їхня довжина.</summary>
+        private float attemptStartY;
+        private float attemptApexY;
+
+        /// <summary>Рядок JUMP ok/fail — справжня частка провалів стрибків, їхня довжина й фактична висота підйому
+        /// (rise — щоб підібрати межу прямого високого стрибка, ШІ-чат 0.5.6).</summary>
         private void LogJump(string result, int fx, int fy, int tx, int ty, NavMove move, float startedAt)
         {
             BotLog.Write(System.FormattableString.Invariant(
-                $"JUMP {result} bot={data.player.playerID} move={move} dx={tx - fx} dy={ty - fy} t={Time.time - startedAt:0.00}"));
+                $"JUMP {result} bot={data.player.playerID} move={move} dx={tx - fx} dy={ty - fy} rise={attemptApexY - attemptStartY:0.0} t={Time.time - startedAt:0.00}"));
         }
 
         /// <summary>Дійшли — успіх; впали нижче за обидві клітинки або не дійшли за таймаут — невдача, штраф переходу.</summary>
@@ -900,6 +912,15 @@ namespace RoundsBots
             // (гра 2026-11-25, свічка на торті: бот впирався в стінку й зачіплявся за неї замість перелетіти).
             bool risingNow = data.playerVel != null && Velocity(data.playerVel).y > 0f;
             if ((risingNow || myPosition.y < landing.y - 1f) && horizontal != 0 && IsWallAhead(myPosition, horizontal))
+            {
+                horizontal = 0;
+            }
+
+            // Приземлення майже над нами (прямий високий стрибок крізь дірку в стелі) — летимо строго вгору, поки не
+            // піднялися до краю, інакше зачепимо край отвору (ШІ-чат 0.5.6).
+            // Лише для стрибка вище за звичайний (інакше звичайні стрибки на сусідній уступ чіплялися б за кут).
+            bool straightHigh = attempt.HasValue && step.Y - attempt.Value.fy > NavMap.Get().JumpUp;
+            if (straightHigh && horizontal != 0 && myPosition.y < landing.y - 1f && Mathf.Abs(landing.x - myPosition.x) < StraightUpReach)
             {
                 horizontal = 0;
             }

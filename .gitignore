@@ -10,3 +10,4 @@ docs/ai_chat_topic_*.md
 docs/human_picks_report.md
 __pycache__/
 dist/pkg/*.dll
+tmp_council/

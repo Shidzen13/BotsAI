@@ -77,6 +77,18 @@ namespace RoundsBots
             BotLog.Write($"LEARN fail {move} ({fromX},{fromY})->({toX},{toY}) penalty={learning.PenaltyOf(fromX, fromY, toX, toY):0.#} edges={learning.Count}");
         }
 
+        /// <summary>Перехід непрохідний (не пробили коробку) — одразу найбільший штраф цьому переходу.</summary>
+        public static void ReportBlocked(int fromX, int fromY, int toX, int toY, string move)
+        {
+            EdgeLearning learning = LearningForCurrentMap();
+            if (learning.RecordBlocked(fromX, fromY, toX, toY) && IsInside(fromX, fromY) && IsInside(toX, toY))
+            {
+                grid?.SetPenalty(fromX, fromY, toX, toY, learning.PenaltyOf(fromX, fromY, toX, toY));
+            }
+
+            BotLog.Write($"LEARN fail {move} ({fromX},{fromY})->({toX},{toY}) penalty={learning.PenaltyOf(fromX, fromY, toX, toY):0.#} edges={learning.Count}");
+        }
+
         /// <summary>Стрибок не долетів за час — легкий штраф лише цьому переходу.</summary>
         public static void ReportTimeout(int fromX, int fromY, int toX, int toY, string move)
         {
@@ -130,6 +142,37 @@ namespace RoundsBots
                     }
                 }
             }
+        }
+
+        private static bool[,] boxMemory;
+        private static MapWrapper boxMemoryFor;
+
+        /// <summary>
+        /// Де на цій карті будь-коли стояли коробки — розбиті теж (ШІ-чат 0.5.6: прямий високий стрибок дозволено лише
+        /// крізь пробиту стелю, а після пролому коробок у сітці вже немає).
+        /// </summary>
+        private static bool[,] RememberBoxes(bool[,] breakables)
+        {
+            MapWrapper map = MapManager.instance != null ? MapManager.instance.currentMap : null;
+            if (!ReferenceEquals(map, boxMemoryFor) || boxMemory == null || boxMemory.GetLength(0) != Width || boxMemory.GetLength(1) != Height)
+            {
+                boxMemoryFor = map;
+                boxMemory = null;
+            }
+
+            if (breakables != null)
+            {
+                boxMemory = boxMemory ?? new bool[Width, Height];
+                for (int x = 0; x < Width; x++)
+                {
+                    for (int y = 0; y < Height; y++)
+                    {
+                        boxMemory[x, y] |= breakables[x, y];
+                    }
+                }
+            }
+
+            return boxMemory;
         }
 
         public static NavGrid Get()
@@ -293,7 +336,7 @@ namespace RoundsBots
                 }
             }
 
-            var built = new NavGrid(solid, PlayerClearance, MinBotJumps(), breakables);
+            var built = new NavGrid(solid, PlayerClearance, MinBotJumps(), breakables, RememberBoxes(breakables));
             ApplyLearned(built);
             MapWrapper map = MapManager.instance != null ? MapManager.instance.currentMap : null;
             if (!ReferenceEquals(map, dumpedFor))

@@ -94,6 +94,7 @@ namespace RoundsBots
                 aim = homing;
                 HasClearShot = true;
                 LastHomingShot = true;
+                LogHoming(from, targetPosition, homing);
             }
 
             if (!HasClearShot && TryBankShot(from, targetPosition, speed, gravity, out Vector2 bank))
@@ -123,6 +124,24 @@ namespace RoundsBots
 
         /// <summary>Чи останній постріл — самонавідний «у бік» цілі (для лога).</summary>
         public bool LastHomingShot { get; private set; }
+
+        private const float HomingLogInterval = 1f;
+        private float nextHomingLogAt;
+
+        /// <summary>Діагностика (гра: з homing бот стріляв собі під ноги): кут пострілу й де ціль.</summary>
+        private void LogHoming(Vector2 from, Vector2 targetPosition, Vector2 aim)
+        {
+            if (UnityEngine.Time.time < nextHomingLogAt)
+            {
+                return;
+            }
+
+            nextHomingLogAt = UnityEngine.Time.time + HomingLogInterval;
+            Vector2 toTarget = targetPosition - from;
+            float angle = Mathf.Atan2(aim.y, aim.x) * Mathf.Rad2Deg;
+            BotLog.Write(System.FormattableString.Invariant(
+                $"HOMING pos=({from.x:0.0},{from.y:0.0}) toTarget=({toTarget.x:0.0},{toTarget.y:0.0}) aimAngle={angle:0} aim=({aim.x:0.00},{aim.y:0.00})"));
+        }
 
         /// <summary>Картка Homing додає кулям компонент Homing (через Gun.objectsToSpawn → AddToProjectile).</summary>
         private bool HasHoming()
