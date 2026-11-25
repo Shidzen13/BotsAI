@@ -18,23 +18,25 @@ public sealed class RealMapTests
     public static IEnumerable<object[]> MapFiles() =>
         Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "Maps"), "*.txt").Select(f => new object[] { Path.GetFileName(f) });
 
-    internal static NavGrid Load(string file, int clearance = 2)
+    internal static NavGrid Load(string file, int clearance = 2) => LoadWith(file, clearance, 1);
+
+    internal static NavGrid LoadWith(string file, int clearance, int jumps)
     {
-        string[] rows = File.ReadAllLines(Path.Combine(AppContext.BaseDirectory, "Maps", file))
-            .Where(l => l.Length == 72 && !l.Contains('='))
-            .ToArray();
+        string[] lines = File.ReadAllLines(Path.Combine(AppContext.BaseDirectory, "Maps", file));
+        int width = lines.Where(l => !l.Contains('=') && !l.StartsWith("legend")).Select(l => l.Length).DefaultIfEmpty(72).Max();
+        string[] rows = lines.Where(l => l.Length == width && !l.Contains('=')).ToArray(); // ширина з 0.5.5 — за межами карти
         int height = rows.Length;
-        var solid = new bool[72, height];
+        var solid = new bool[width, height];
         for (int row = 0; row < height; row++)
         {
-            for (int x = 0; x < 72; x++)
+            for (int x = 0; x < width; x++)
             {
                 char c = rows[row][x];
                 solid[x, height - 1 - row] = c == '#' || c == 'D' || c == 'S';
             }
         }
 
-        return new NavGrid(solid, clearance);
+        return new NavGrid(solid, clearance, jumps);
     }
 
     [Theory]
@@ -147,6 +149,8 @@ public sealed class RealMapTests
         var path = grid.FindPath(7, 7, 11, 14);
 
         Assert.NotEmpty(path);
-        Assert.Contains(path, s => s.Move == NavMove.Bounce);
+        // З 0.5.5: ліва грань масиву (починається на 3 вище) — по ній вилазимо замість відскоку з ризиком.
+        Assert.Contains(path, s => s.Move == NavMove.Bounce || s.Move == NavMove.Climb);
+        Assert.NotEmpty(grid.FindPath(7, 7, 11, 14, allowBounce: false));
     }
 }

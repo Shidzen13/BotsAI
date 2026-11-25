@@ -70,4 +70,28 @@ public sealed class EdgeLearningTests
     {
         Assert.Equal(expected, BotMath.ShouldPenalise(move, fell));
     }
+
+    [Fact]
+    public void TwoTimeouts_EqualOneFall_OnlyOnThatEdge()
+    {
+        var learning = new EdgeLearning();
+
+        learning.RecordTimeout(3, 3, 4, 8);
+        learning.RecordTimeout(3, 3, 4, 8);
+
+        Assert.Equal(EdgeLearning.FailPenalty, learning.PenaltyOf(3, 3, 4, 8));
+        Assert.Equal(4f, learning.PenaltyOf(3, 3, 2, 8)); // сусідні цілі в ряду теж (2 × 2)
+        Assert.Equal(4f, learning.PenaltyOf(3, 3, 6, 8));
+        Assert.Equal(0f, learning.PenaltyOf(3, 3, 7, 8));
+        Assert.Equal(5, learning.Count);
+    }
+
+    [Theory]
+    [InlineData(NavMove.Jump, false, true)]
+    [InlineData(NavMove.Jump, true, false)] // падіння штрафується окремо
+    [InlineData(NavMove.Walk, false, false)]
+    public void TimeoutPenaltyOnlyForJumpsAndFalls(NavMove move, bool fell, bool expected)
+    {
+        Assert.Equal(expected, BotMath.ShouldPenaliseTimeout(move, fell));
+    }
 }

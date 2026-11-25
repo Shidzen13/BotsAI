@@ -32,6 +32,10 @@ namespace RoundsBots
         private bool bounced;
         private const float RepeatedStuckWindow = 3f;
         private const float ReverseSeconds = 2.5f;
+        private const float SameSpotWindow = 10f;
+        private const float SameSpotDistance = 1.5f;
+        private Vector2 lastStuckPosition = new Vector2(float.MaxValue, float.MaxValue);
+        private int sameSpotCount;
         private const float FlipHoldSeconds = 0.35f;  // аналіз: бот розвертався 82 рази/хв, людина 9
         private const float EmergencyFallY = -14f;    // нижче — ось-ось межа арени
         private const float StandingOffset = 0.5f;   // центр гравця вище центру клітинки
@@ -463,6 +467,23 @@ namespace RoundsBots
         }
 
         /// <summary>Стан маршруту для діагностики: довжина, перші кроки, запланований рух.</summary>
+        /// <summary>
+        /// Під час кроку Climb: чи натиснути стрибок у цей кадр — відразу після зачіпу за стіну (вікно гри 0.1 с)
+        /// або подвійним стрибком на вершині, якщо ще нижче за край стіни.
+        /// </summary>
+        public bool ClimbJumpNow(Vector2 myPosition)
+        {
+            if (!plannedStep.HasValue || plannedStep.Value.Move != NavMove.Climb || data.isGrounded)
+            {
+                return false;
+            }
+
+            Vector2 landing = NavMap.ToWorld(plannedStep.Value.X, plannedStep.Value.Y);
+            bool vyKnown = data.playerVel != null;
+            float vy = vyKnown ? Velocity(data.playerVel).y : 0f;
+            return BotMath.ClimbJump(data.sinceWallGrab, data.sinceJump, data.currentJumps, vy, myPosition.y, landing.y);
+        }
+
         public string DescribePlan()
         {
             string planned = plannedStep.HasValue ? $"{plannedStep.Value.Move}->({plannedStep.Value.X},{plannedStep.Value.Y})" : "-";
@@ -524,7 +545,7 @@ namespace RoundsBots
             EvaluateAttempt(sx, sy, myPosition);
 
             var path = grid.FindPath(sx, sy, gx, gy);
-            if (path.Count == 0 && TryNearestReachable(grid, sx, sy, gx, gy, out int nx, out int ny))
+            if (path.Count == 0 && TryNearestReachable(grid, sx, sy, gx, gy, myPosition + toTarget, out int nx, out int ny))
             {
                 // До цілі не дістатися — йдемо в досяжну клітинку, найближчу до неї (звідти може бути лінія вогню).
                 path = grid.FindPath(sx, sy, nx, ny);
@@ -545,9 +566,19 @@ namespace RoundsBots
                 bounced = false;
                 if (bounceColumn < 0 || data.block == null || data.block.IsOnCD())
                 {
-                    // Без готового блоку відскок коштує 51 HP — чекаємо блок, стоїмо.
-                    plannedStep = null;
-                    return true;
+                    // Без готового блоку відскок коштує 51 HP. Раніше бот просто стояв і чекав блок
+                    // (гра 2026-11-25: «пробіл у пошуку шляху») — спершу шукаємо дорогу без відскоку.
+                    var noBounce = grid.FindPath(sx, sy, gx, gy, allowBounce: false);
+                    if (noBounce.Count == 0)
+                    {
+                        plannedStep = null;
+                        return true;
+                    }
+
+                    path = noBounce;
+                    LastPathLength = path.Count;
+                    LastPath = path;
+                    next = path[0];
                 }
             }
 
@@ -585,12 +616,16 @@ namespace RoundsBots
 
         private const float NearestReachableBudget = 200f;
         private const float NearestReachableCacheSeconds = 1f;
+        private const float ApproachSightRange = 30f;
         private (int sx, int sy, int gx, int gy) nearestKey;
         private (int x, int y) nearestCell;
         private float nearestAt = float.NegativeInfinity;
 
         /// <summary>Досяжна зі старту клітинка, найближча до цілі (кеш на секунду — Dijkstra по всій карті).</summary>
-        private bool TryNearestReachable(NavGrid grid, int sx, int sy, int gx, int gy, out int nx, out int ny)
+        private (int x, int y) approachCell = (-1, -1);
+        private (int x, int y) approachTargetCell = (-1, -1);
+
+        private bool TryNearestReachable(NavGrid grid, int sx, int sy, int gx, int gy, Vector2 targetWorld, out int nx, out int ny)
         {
             var key = (sx, sy, gx, gy);
             if (key != nearestKey || Time.time - nearestAt > NearestReachableCacheSeconds)
@@ -598,15 +633,26 @@ namespace RoundsBots
                 nearestKey = key;
                 nearestAt = Time.time;
                 nearestCell = (sx, sy);
-                float best = float.PositiveInfinity;
-                foreach ((int x, int y, float _) in grid.ReachableWithin(sx, sy, NearestReachableBudget))
+                // Гравець сховався (гра 2026-11-25: бот хвилину стояв під гравцем у кишені): шукаємо досяжну
+                // клітинку, звідки ціль ВИДНО, — а не найближчу по прямій.
+                var reachable = grid.ReachableWithin(sx, sy, NearestReachableBudget);
+                var options = new System.Collections.Generic.List<(float cost, bool canSee, float distanceToTarget)>(reachable.Count);
+                LayerMask mask = PlayerManager.instance.canSeePlayerMask;
+                foreach ((int x, int y, float cost) in reachable)
                 {
-                    float distance = (x - gx) * (x - gx) + (y - gy) * (y - gy);
-                    if (distance < best)
-                    {
-                        best = distance;
-                        nearestCell = (x, y);
-                    }
+                    Vector2 eye = NavMap.ToWorld(x, y) + Vector2.up * 0.5f;
+                    float distance = Vector2.Distance(eye, targetWorld);
+                    bool canSee = distance <= ApproachSightRange && !Physics2D.Linecast(eye, targetWorld, mask);
+                    options.Add((cost, canSee, distance));
+                }
+
+                int previous = reachable.FindIndex(c => c.x == approachCell.x && c.y == approachCell.y);
+                int chosen = BotMath.ChooseApproachCell(options, approachTargetCell == (gx, gy) ? previous : -1);
+                if (chosen >= 0)
+                {
+                    nearestCell = (reachable[chosen].x, reachable[chosen].y);
+                    approachCell = nearestCell;
+                    approachTargetCell = (gx, gy);
                 }
             }
 
@@ -676,6 +722,10 @@ namespace RoundsBots
                 if (BotMath.ShouldPenalise(a.move, fell))
                 {
                     NavMap.ReportFailure(a.fx, a.fy, a.tx, a.ty, $"{a.move}/{why}");
+                }
+                else if (BotMath.ShouldPenaliseTimeout(a.move, fell))
+                {
+                    NavMap.ReportTimeout(a.fx, a.fy, a.tx, a.ty, $"{a.move}/{why}");
                 }
 
                 if (a.move == NavMove.Jump || a.move == NavMove.Fall)
@@ -807,9 +857,10 @@ namespace RoundsBots
             foreach (RaycastHit2D hit in Physics2D.RaycastAll(from, new Vector2(horizontal, 0f), WallProbeDistance, mask))
             {
                 Transform root = hit.transform != null ? hit.transform.root : null;
-                if (root != null && root.GetComponent<Player>() == null && root.GetComponent<SpawnedAttack>() == null)
+                if (root != null && root.GetComponent<Player>() == null && root.GetComponent<SpawnedAttack>() == null
+                    && BotMath.IsSteepWall(hit.normal.x, hit.normal.y))
                 {
-                    return true;
+                    return true; // похилий схил — не стіна (гра 2026-11-25: бот гальмував і розвертався на схилах)
                 }
             }
 
@@ -871,14 +922,18 @@ namespace RoundsBots
             }
 
             stuckTimer = 0f;
-            if (now - lastStuckAt < RepeatedStuckWindow && horizontal != 0)
+            Vector2 at = data.transform.position;
+            bool sameSpot = now - lastStuckAt < SameSpotWindow && Vector2.Distance(at, lastStuckPosition) < SameSpotDistance;
+            sameSpotCount = sameSpot ? sameSpotCount + 1 : 0;
+            if (horizontal != 0 && BotMath.ShouldReverseWhenStuck(now - lastStuckAt < RepeatedStuckWindow, sameSpot, data.isGrounded))
             {
+                // Кут чи виступ (гра 2026-11-25: бот 20 с висів в одній точці): розворот одразу, і що частіше — то довше.
                 reverseDirection = -horizontal;
-                reverseUntil = now + ReverseSeconds;
+                reverseUntil = now + BotMath.StuckReverseSeconds(ReverseSeconds, sameSpotCount);
             }
 
             lastStuckAt = now;
-            Vector2 at = data.transform.position;
+            lastStuckPosition = at;
             BotLog.Write(System.FormattableString.Invariant($"STUCK bot={data.player.playerID} reason=no-progress-x move={horizontal} pos=({at.x:F1},{at.y:F1}) grounded={data.isGrounded} wall={data.isWallGrab} reversed={reverseUntil > now}"));
             return true;
         }

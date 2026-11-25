@@ -24,12 +24,18 @@ namespace RoundsBots
         private static System.Type mapAnimationType;
         private static bool mapAnimationTypeLooked;
         private const float MinRebuildGap = 1f;
-        private const float OriginX = -36f;
+        // Ширина сітки — за реальними межами карти (гра 2026-11-25: гравець ховався в кишені за x=-36, де бот «нічого не бачив»).
+        private const float MinHalfWidth = 40f;
+        private const float MaxHalfWidth = 80f;
+        private const float BoundsMargin = 3f;
+        private static float OriginX = -MinHalfWidth;
         private const float OriginY = -20f;
-        private const int Width = 72;
+        private static int Width = (int)(2 * MinHalfWidth);
         private const int Height = 40;
         private static readonly Vector2 ProbeSize = new Vector2(0.9f, 0.9f);
         private static readonly Collider2D[] Buffer = new Collider2D[16];
+        private static readonly RaycastHit2D[] RayBuffer = new RaycastHit2D[16];
+        private static readonly Vector2 PointProbe = new Vector2(0.15f, 0.15f);
 
         private static NavGrid grid;
         private static float builtAt = float.NegativeInfinity;
@@ -69,6 +75,21 @@ namespace RoundsBots
             }
 
             BotLog.Write($"LEARN fail {move} ({fromX},{fromY})->({toX},{toY}) penalty={learning.PenaltyOf(fromX, fromY, toX, toY):0.#} edges={learning.Count}");
+        }
+
+        /// <summary>Стрибок не долетів за час — легкий штраф лише цьому переходу.</summary>
+        public static void ReportTimeout(int fromX, int fromY, int toX, int toY, string move)
+        {
+            EdgeLearning learning = LearningForCurrentMap();
+            foreach ((int fx, int fy, int tx, int ty) in learning.RecordTimeout(fromX, fromY, toX, toY))
+            {
+                if (IsInside(fx, fy) && IsInside(tx, ty))
+                {
+                    grid?.SetPenalty(fx, fy, tx, ty, learning.PenaltyOf(fx, fy, tx, ty));
+                }
+            }
+
+            BotLog.Write($"LEARN timeout {move} ({fromX},{fromY})->({toX},{toY}) penalty={learning.PenaltyOf(fromX, fromY, toX, toY):0.#}");
         }
 
         /// <summary>Перехід удався — знімаємо його штраф.</summary>
@@ -167,12 +188,53 @@ namespace RoundsBots
             return mapAnimationType != null && Object.FindObjectOfType(mapAnimationType) != null;
         }
 
+        /// <summary>Горизонтальні межі сітки — по всіх колайдерах поточної карти (не менше ±40, не більше ±80).</summary>
+        private static void FitWidthToMap()
+        {
+            float minX = -MinHalfWidth;
+            float maxX = MinHalfWidth;
+            Map map = MapManager.instance != null && MapManager.instance.currentMap != null ? MapManager.instance.currentMap.Map : null;
+            if (map != null)
+            {
+                foreach (Collider2D collider in map.GetComponentsInChildren<Collider2D>())
+                {
+                    if (collider != null && collider.enabled && !collider.isTrigger)
+                    {
+                        minX = Mathf.Min(minX, collider.bounds.min.x - BoundsMargin);
+                        maxX = Mathf.Max(maxX, collider.bounds.max.x + BoundsMargin);
+                    }
+                }
+            }
+
+            minX = Mathf.Max(-MaxHalfWidth, Mathf.Floor(minX));
+            maxX = Mathf.Min(MaxHalfWidth, Mathf.Ceil(maxX));
+            OriginX = minX;
+            Width = Mathf.Max(1, Mathf.RoundToInt((maxX - minX) / CellSize));
+        }
+
+        /// <summary>Найменша кількість стрибків серед ботів (сітка спільна — щоб маршрут був під силу кожному).</summary>
+        private static int MinBotJumps()
+        {
+            int jumps = int.MaxValue;
+            foreach (Player player in PlayerManager.instance.players)
+            {
+                if (player != null && player.GetComponent<BotBrain>() != null && player.data != null)
+                {
+                    jumps = Mathf.Min(jumps, player.data.jumps);
+                }
+            }
+
+            return jumps == int.MaxValue ? 1 : Mathf.Max(1, jumps);
+        }
+
         private static NavGrid Build()
         {
             LayerMask mask = PlayerManager.instance.canSeePlayerMask;
+            FitWidthToMap();
             var solid = new bool[Width, Height];
             var marks = new char[Width, Height];
             bool movablesFound = false;
+            int openedGaps = 0;
             for (int x = 0; x < Width; x++)
             {
                 for (int y = 0; y < Height; y++)
@@ -180,14 +242,25 @@ namespace RoundsBots
                     Vector2 center = ToWorld(x, y);
                     bool hazard = HazardCache.IsDangerous(center, -1f);
                     solid[x, y] = IsSolidAt(center, mask, out bool breakable, out bool movable) || hazard;
+                    if (solid[x, y] && !hazard && !breakable && !movable && IsNarrowPassage(center, mask))
+                    {
+                        solid[x, y] = false; // щілина ≥1,2 між двома стінами — клітинка «тверда» лише через їхні краї
+                        openedGaps++;
+                    }
+
                     marks[x, y] = hazard ? 'S' : breakable ? 'D' : movable ? 'M' : ' ';
                     movablesFound |= movable || breakable;
                 }
             }
 
             hasMovables = movablesFound;
+            if (openedGaps > 0)
+            {
+                Plugin.Log.LogInfo($"Nav grid: opened {openedGaps} narrow gap cells");
+            }
+
             hasMovingParts = HasMovingParts();
-            var built = new NavGrid(solid, PlayerClearance);
+            var built = new NavGrid(solid, PlayerClearance, MinBotJumps());
             ApplyLearned(built);
             MapWrapper map = MapManager.instance != null ? MapManager.instance.currentMap : null;
             if (!ReferenceEquals(map, dumpedFor))
@@ -260,11 +333,58 @@ namespace RoundsBots
             }
         }
 
+        /// <summary>
+        /// Вузький прохід (гра 2026-11-25: щілина в дні кімнати 1,6 од. — сітка 1×1 з пробою 0.9 бачила її стіною на
+        /// всіх картах). Центр клітинки вільний, а вздовж осі вільний проміжок між двома стінами завширшки
+        /// <see cref="BotMath.MinPassageGap"/>..<see cref="BotMath.MaxPassageGap"/> — гравець проходить.
+        /// </summary>
+        private static bool IsNarrowPassage(Vector2 center, LayerMask mask)
+        {
+            if (IsSolidAt(center, mask, out _, out _, PointProbe))
+            {
+                return false;
+            }
+
+            return BotMath.IsPassageGap(FreeDistance(center, Vector2.right, mask), FreeDistance(center, Vector2.left, mask))
+                || BotMath.IsPassageGap(FreeDistance(center, Vector2.up, mask), FreeDistance(center, Vector2.down, mask));
+        }
+
+        private static float FreeDistance(Vector2 from, Vector2 direction, LayerMask mask)
+        {
+            float nearest = BotMath.MaxPassageGap;
+            int count = Physics2D.RaycastNonAlloc(from, direction, RayBuffer, BotMath.MaxPassageGap, mask);
+            for (int i = 0; i < count; i++)
+            {
+                if (IsBlocking(RayBuffer[i].collider) && RayBuffer[i].distance < nearest)
+                {
+                    nearest = RayBuffer[i].distance;
+                }
+            }
+
+            return nearest;
+        }
+
+        private static bool IsBlocking(Collider2D collider)
+        {
+            if (collider == null || collider.isTrigger)
+            {
+                return false;
+            }
+
+            Transform root = collider.transform.root;
+            return root.GetComponent<Player>() == null && root.GetComponent<SpawnedAttack>() == null && root.GetComponent<ProjectileHit>() == null;
+        }
+
         private static bool IsSolidAt(Vector2 center, LayerMask mask, out bool breakable, out bool movable)
+        {
+            return IsSolidAt(center, mask, out breakable, out movable, ProbeSize);
+        }
+
+        private static bool IsSolidAt(Vector2 center, LayerMask mask, out bool breakable, out bool movable, Vector2 size)
         {
             breakable = false;
             movable = false;
-            int count = Physics2D.OverlapBoxNonAlloc(center, ProbeSize, 0f, Buffer, mask);
+            int count = Physics2D.OverlapBoxNonAlloc(center, size, 0f, Buffer, mask);
             for (int i = 0; i < count; i++)
             {
                 Collider2D collider = Buffer[i];

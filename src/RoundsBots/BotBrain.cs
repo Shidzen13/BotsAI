@@ -21,6 +21,11 @@ namespace RoundsBots
         private const float CeilingGravityEstimate = 40f;
 
         private float lastVerticalSpeed;
+
+        /// <summary>Справжня швидкість гравця. Швидкість «за кадр» при 256 FPS у кілька разів завищена (позиція
+        /// змінюється лише на кроках фізики) — через це блок об межу арени натискався зарано (гра 2026-11-25).</summary>
+        private static readonly HarmonyLib.AccessTools.FieldRef<PlayerVelocity, Vector2> RealVelocity =
+            HarmonyLib.AccessTools.FieldRefAccess<PlayerVelocity, Vector2>("velocity");
         private const float BoundsBlockLookAhead = 0.08f;
         private const float DebugLogInterval = 3f;
         private const float ArenaMargin = 10f;
@@ -99,7 +104,9 @@ namespace RoundsBots
             input.ResetInput();
 
             Vector2 position = transform.position;
-            Vector2 frameVelocity = (position - lastFramePosition) / Mathf.Max(Time.deltaTime, 0.0001f);
+            Vector2 frameVelocity = data.playerVel != null
+                ? RealVelocity(data.playerVel)
+                : (position - lastFramePosition) / Mathf.Max(Time.deltaTime, 0.0001f);
             lastVerticalSpeed = frameVelocity.y;
             lastFramePosition = position;
 
@@ -163,6 +170,13 @@ namespace RoundsBots
             input.shootWasPressed = canShoot;
             input.shootWasReleased = wasShooting && !canShoot; // потрібно для зброї із зарядом
             wasShooting = canShoot;
+
+            // Лазіння по стіні — щокадру, а не лише в «думанні»: гра дає відстрибнути від стіни лише 0.1 с після
+            // зачіпу, і бот пропускав це вікно та зісковзував (гра 2026-11-25: «не вистачає стрибка»).
+            if (navigation.ClimbJumpNow(transform.position))
+            {
+                pendingJump = true;
+            }
 
             // Стеля (верхня межа арени): з високої платформи звичайний стрибок виносить за межу — смерть.
             // Біля стелі — короткий стрибок без утримання; під самою межею — не стрибаємо.

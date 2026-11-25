@@ -14,6 +14,11 @@ namespace RoundsBots.Logic
     {
         public const float FailPenalty = 8f;
         public const float NeighbourPenalty = 4f;
+        /// <summary>Не долетіли вчасно — пів штрафу лише самому переходу: двічі поспіль = як падіння
+        /// (гра 2026-11-25: без цього бот безкінечно пробував недосяжний стрибок на 5 угору і ходив по колу).</summary>
+        public const float TimeoutPenalty = 4f;
+        public const float TimeoutNeighbourPenalty = 2f;
+        public const int TimeoutNeighbourReach = 2;
         public const float MaxPenalty = 24f;
         public const float DecayFactor = 0.5f;
         public const float ForgetBelow = 0.5f;
@@ -34,6 +39,23 @@ namespace RoundsBots.Logic
             Add((fx, fy, tx, ty), FailPenalty, changed);
             Add((fx - 1, fy, tx - 1, ty), NeighbourPenalty, changed);
             Add((fx + 1, fy, tx + 1, ty), NeighbourPenalty, changed);
+            return changed;
+        }
+
+        /// <summary>Стрибок не вдався за час (без падіння) — <see cref="TimeoutPenalty"/> лише цьому переходу.</summary>
+        public IReadOnlyList<(int fx, int fy, int tx, int ty)> RecordTimeout(int fx, int fy, int tx, int ty)
+        {
+            var changed = new List<(int, int, int, int)>();
+            Add((fx, fy, tx, ty), TimeoutPenalty, changed);
+            // Сусідні цілі в тому самому ряду (гра 2026-11-25: бот перебирав той самий недосяжний уступ з dx=-4,-3,-2).
+            for (int d = -TimeoutNeighbourReach; d <= TimeoutNeighbourReach; d++)
+            {
+                if (d != 0)
+                {
+                    Add((fx, fy, tx + d, ty), TimeoutNeighbourPenalty, changed);
+                }
+            }
+
             return changed;
         }
 

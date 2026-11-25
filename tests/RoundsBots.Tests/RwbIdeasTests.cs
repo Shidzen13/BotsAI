@@ -63,4 +63,59 @@ public sealed class RwbIdeasTests
         Assert.True(BulletSim.Needed(1f, 1f));
         Assert.True(BulletSim.Needed(0f, 1.5f));
     }
+
+    [Fact]
+    public void ApproachCell_PrefersCheapestCellWithSight()
+    {
+        var cells = new[] { (cost: 1f, canSee: false, distanceToTarget: 2f), (cost: 9f, canSee: true, distanceToTarget: 12f), (cost: 5f, canSee: true, distanceToTarget: 15f) };
+        Assert.Equal(2, BotMath.ChooseApproachCell(cells));
+    }
+
+    [Fact]
+    public void ApproachCell_FallsBackToNearestWhenNothingSeesTarget()
+    {
+        var cells = new[] { (cost: 1f, canSee: false, distanceToTarget: 8f), (cost: 4f, canSee: false, distanceToTarget: 3f) };
+        Assert.Equal(1, BotMath.ChooseApproachCell(cells));
+        Assert.Equal(-1, BotMath.ChooseApproachCell(new (float, bool, float)[0]));
+    }
+
+    [Theory]
+    [InlineData(false, false, true, false)] // перше застрягання на землі — ще пробуємо
+    [InlineData(false, true, true, true)]   // той самий кут — розворот одразу
+    [InlineData(false, false, false, true)] // висимо під виступом — розворот одразу
+    [InlineData(true, false, true, true)]
+    public void StuckReversal(bool repeated, bool sameSpot, bool grounded, bool expected)
+    {
+        Assert.Equal(expected, BotMath.ShouldReverseWhenStuck(repeated, sameSpot, grounded));
+    }
+
+    [Fact]
+    public void StuckReverseGrowsAndCaps()
+    {
+        Assert.Equal(2.5f, BotMath.StuckReverseSeconds(2.5f, 0));
+        Assert.Equal(4.5f, BotMath.StuckReverseSeconds(2.5f, 2));
+        Assert.Equal(6f, BotMath.StuckReverseSeconds(2.5f, 10));
+    }
+
+    [Theory]
+    [InlineData(0.02f, 0.5f, 0, 3f, 0f, 10f, true)]   // щойно зачепився за стіну — стрибаємо одразу
+    [InlineData(0.02f, 0.05f, 1, 3f, 0f, 10f, false)] // гра ще не дасть стрибнути (0.1 с після стрибка)
+    [InlineData(0.5f, 0.6f, 1, 0f, 0f, 10f, true)]    // вершина польоту, є подвійний — добираємо висоту
+    [InlineData(0.5f, 0.6f, 0, 0f, 0f, 10f, false)]   // стрибків немає — чекаємо стіни
+    [InlineData(0.02f, 0.5f, 1, 3f, 10f, 10f, false)] // уже на висоті краю — летимо на полицю
+    public void ClimbJumpTiming(float sinceWall, float sinceJump, int jumps, float vy, float y, float ledge, bool expected)
+    {
+        Assert.Equal(expected, BotMath.ClimbJump(sinceWall, sinceJump, jumps, vy, y, ledge));
+    }
+
+    [Theory]
+    [InlineData(-1f, 0f, true)]          // вертикальна стіна
+    [InlineData(-0.5f, 0.866f, false)]   // схил 30° — вибігаємо
+    [InlineData(-0.707f, 0.707f, false)] // 45° — ще схил
+    [InlineData(-0.94f, 0.34f, true)]    // 70° — стіна
+    [InlineData(0f, 0f, false)]
+    public void SteepWallVsSlope(float nx, float ny, bool expected)
+    {
+        Assert.Equal(expected, BotMath.IsSteepWall(nx, ny));
+    }
 }

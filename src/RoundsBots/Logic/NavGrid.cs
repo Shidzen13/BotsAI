@@ -40,10 +40,14 @@ namespace RoundsBots.Logic
         public const int MaxJumpSide = 7;
         public const int MaxGapJump = 10;
         public const int MaxGapDrop = 8;
-        public const int MaxWallClimb = 16;
+        public const int MaxWallClimb = 24;   // гра 2026-11-25: коридор між стіною арени й кімнатою — 21 угору (було 16)
+        public const int WallReachUp = 3;     // стіна може починатися до 3 клітинок над підлогою — підстрибуємо й чіпляємося
         public const int BounceHeight = 25;     // на скільки клітинок від низу арени підкидає відскок із блоком
         public const int BounceSideReach = 6;   // наскільки вбік можна зміститися в польоті після відскоку
-        public const int BounceDrift = 6;       // наскільки далеко від краю може бути колона падіння
+        /// <summary>Відскок витрачає блок і ризикує життям — лише коли звичайний маршрут довший на ~40 клітинок
+        /// (гра 2026-11-25: з ціною 12 бот стрибав у прірву замість доступної дороги).</summary>
+        public const float BounceCost = 45f;
+        public const int BounceDrift = 10;      // наскільки далеко від краю може бути колона падіння (гра 2026-11-25: людина відскакує за 8–9 клітинок від берега, між платформами)
 
         private readonly bool[,] solid;
         private readonly Dictionary<int, List<(int node, NavMove move, float cost)>> edges = new Dictionary<int, List<(int, NavMove, float)>>();
@@ -51,9 +55,11 @@ namespace RoundsBots.Logic
         private readonly Dictionary<long, float> penalties = new Dictionary<long, float>();
 
         /// <param name="clearance">Скільки вільних клітинок треба над опорою, щоб пройти (зріст гравця в клітинках).</param>
-        public NavGrid(bool[,] solid, int clearance = 2)
+        /// <param name="jumps">Скільки стрибків у ботів: кожен додатковий (подвійний) дає ще <see cref="ExtraJumpUp"/> клітинок висоти.</param>
+        public NavGrid(bool[,] solid, int clearance = 2, int jumps = 1)
         {
             this.solid = solid ?? throw new ArgumentNullException(nameof(solid));
+            JumpUp = JumpHeightFor(jumps);
             Clearance = Math.Max(1, clearance);
             Width = solid.GetLength(0);
             Height = solid.GetLength(1);
@@ -61,6 +67,18 @@ namespace RoundsBots.Logic
         }
 
         public int Clearance { get; }
+
+        /// <summary>Наскільки клітинок угору дістає стрибок з урахуванням подвійних (гра 2026-11-25: бот із 2 стрибками
+        /// не бачив дороги на платформу на 10 вище, яку людина бере подвійним стрибком).</summary>
+        public int JumpUp { get; }
+
+        public const int ExtraJumpUp = 4;
+        public const int MaxTotalJumpUp = 13;
+
+        public static int JumpHeightFor(int jumps)
+        {
+            return Math.Min(MaxTotalJumpUp, MaxJumpUp + ExtraJumpUp * Math.Max(0, jumps - 1));
+        }
 
         public int Width { get; }
 
@@ -171,7 +189,7 @@ namespace RoundsBots.Logic
         private static long EdgeKey(int from, int to) => ((long)from << 32) | (uint)to;
 
         /// <summary>A* від start до goal (обидві — клітинки для стояння). Порожній список, якщо шляху немає.</summary>
-        public List<NavStep> FindPath(int startX, int startY, int goalX, int goalY)
+        public List<NavStep> FindPath(int startX, int startY, int goalX, int goalY, bool allowBounce = true)
         {
             var result = new List<NavStep>();
             if (!IsStandable(startX, startY) || !IsStandable(goalX, goalY))
@@ -211,6 +229,11 @@ namespace RoundsBots.Logic
 
                 foreach ((int next, NavMove move, float stepCost) in neighbours)
                 {
+                    if (!allowBounce && move == NavMove.Bounce)
+                    {
+                        continue; // блок на перезарядці — відскок коштував би 51 HP
+                    }
+
                     float penalty = penalties.Count > 0 && penalties.TryGetValue(EdgeKey(current, next), out float p) ? p : 0f;
                     float newCost = cost[current] + stepCost + penalty;
                     if (cost.TryGetValue(next, out float old) && old <= newCost)
@@ -374,7 +397,7 @@ namespace RoundsBots.Logic
 
         private void AddJumps(int x, int y, List<(int, NavMove, float)> list)
         {
-            for (int dy = 1; dy <= MaxJumpUp; dy++)
+            for (int dy = 1; dy <= JumpUp; dy++)
             {
                 // Над головою має бути вільно на всю висоту стрибка.
                 if (!IsFree(x, y + dy + Clearance - 1))
@@ -389,6 +412,13 @@ namespace RoundsBots.Logic
                     int tx = x + dx;
                     int ty = y + dy;
                     if (!IsStandable(tx, ty) || !IsRowClear(x, tx, ty + Clearance - 1))
+                    {
+                        continue;
+                    }
+
+                    // Через кут платформи (між нами й ціллю під нею тверде) треба перелетіти вище краю й лише потім
+                    // убік — на межі висоти це не вдається (гра 2026-11-25, Road_M: dy=5 через кут — удар у бік блоку).
+                    if (dy > JumpUp - CornerMargin && HasSolidBetween(x, tx, ty - 1))
                     {
                         continue;
                     }
@@ -444,12 +474,13 @@ namespace RoundsBots.Logic
             foreach (int direction in new[] { -1, 1 })
             {
                 int wallX = x + direction;
-                if (!IsSolid(wallX, y) || wallX < 0 || wallX >= Width)
+                int wallStart = WallStartAbove(x, y, wallX);
+                if (wallStart < 0)
                 {
                     continue;
                 }
 
-                for (int h = y + 1; h <= y + MaxWallClimb && h < Height; h++)
+                for (int h = wallStart + 1; h <= y + MaxWallClimb && h < Height; h++)
                 {
                     if (IsSolid(x, h + Clearance - 1))
                     {
@@ -462,7 +493,7 @@ namespace RoundsBots.Logic
                     }
 
                     // Стіна скінчилася на висоті h: виходимо на її верх.
-                    if (h - y > MaxJumpUp && IsStandable(wallX, h))
+                    if (h - y > JumpUp && IsStandable(wallX, h))
                     {
                         list.Add((Index(wallX, h), NavMove.Climb, 4f + (h - y) * 1.2f));
                     }
@@ -470,15 +501,42 @@ namespace RoundsBots.Logic
                     break;
                 }
 
-                AddClimbSideHops(x, y, wallX, list);
+                AddClimbSideHops(x, y, wallX, wallStart, list);
             }
+        }
+
+        /// <summary>
+        /// Де починається стіна поруч: на нашій висоті або до <see cref="WallReachUp"/> клітинок вище — до неї підстрибуємо
+        /// і чіпляємося (гра 2026-11-25: стіни кімнат і ніжки платформ висять над підлогою, бот їх не бачив). -1 — стіни немає.
+        /// </summary>
+        private int WallStartAbove(int x, int y, int wallX)
+        {
+            if (wallX < 0 || wallX >= Width)
+            {
+                return -1;
+            }
+
+            for (int h = y; h <= y + WallReachUp && h < Height; h++)
+            {
+                if (h > y && IsSolid(x, h + Clearance - 1))
+                {
+                    return -1;
+                }
+
+                if (IsSolid(wallX, h))
+                {
+                    return h;
+                }
+            }
+
+            return -1;
         }
 
         /// <summary>
         /// Під час лазіння по стіні можна відстрибнути вбік на полицю (так людина піднімається біля стін арени):
         /// будь-яка клітинка для стояння вище за звичайний стрибок, до <see cref="MaxJumpSide"/> убік від нашої колонки.
         /// </summary>
-        private void AddClimbSideHops(int x, int y, int wallX, List<(int, NavMove, float)> list)
+        private void AddClimbSideHops(int x, int y, int wallX, int wallStart, List<(int, NavMove, float)> list)
         {
             for (int h = y + 1; h <= y + MaxWallClimb && h < Height; h++)
             {
@@ -487,12 +545,12 @@ namespace RoundsBots.Logic
                     return; // стеля над колонкою лазіння
                 }
 
-                if (!IsSolid(wallX, h - 1))
+                if (h - 1 >= wallStart && !IsSolid(wallX, h - 1))
                 {
                     return; // стіна скінчилася — далі тримається лише «вихід на верх» вище
                 }
 
-                if (h - y <= MaxJumpUp)
+                if (h - y <= JumpUp)
                 {
                     continue; // так високо дістає і звичайний стрибок
                 }
@@ -569,11 +627,28 @@ namespace RoundsBots.Logic
                             }
 
                             added.Add(node);
-                            list.Add((node, NavMove.Bounce, 12f + Math.Abs(lx - column) * 0.5f));
+                            list.Add((node, NavMove.Bounce, BounceCost + Math.Abs(lx - column) * 0.5f));
                         }
                     }
                 }
             }
+        }
+
+        public const int CornerMargin = 1;
+
+        /// <summary>Чи є тверде в ряду y строго між колонками a і b.</summary>
+        private bool HasSolidBetween(int a, int b, int y)
+        {
+            int step = b >= a ? 1 : -1;
+            for (int x = a + step; x != b; x += step)
+            {
+                if (IsSolid(x, y))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private bool IsRowClear(int fromX, int toX, int y)

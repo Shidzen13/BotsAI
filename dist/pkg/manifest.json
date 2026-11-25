@@ -1,6 +1,6 @@
 {
   "name": "BotsAI",
-  "version_number": "0.5.4",
+  "version_number": "0.5.5",
   "website_url": "",
   "description": "AI bots that work online in RoundsWithFriends rooms with friends, and in LOCAL. B add, N remove, 1-4 bot color, up to 4 bots. In-game settings menu. Fixes for Hidden Cards, Infoholic, Toggle Friendly Fire. AI-assisted.",
   "dependencies": [

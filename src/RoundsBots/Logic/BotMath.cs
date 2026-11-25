@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace RoundsBots.Logic
 {
@@ -138,6 +139,19 @@ namespace RoundsBots.Logic
         /// Чи вилетить гравець за межу арени протягом <paramref name="lookAhead"/> секунд.
         /// Якщо так — час тиснути блок: тоді відскок сильніший і без шкоди.
         /// </summary>
+        public const float MinPassageGap = 1.2f;
+        public const float MaxPassageGap = 2.6f;
+
+        /// <summary>
+        /// Вільні відстані від центру клітинки в обидва боки по осі — це щілина, куди пролазить гравець:
+        /// стіни з обох боків близько (не відкритий простір) і проміжок не вужчий за <see cref="MinPassageGap"/>.
+        /// </summary>
+        public static bool IsPassageGap(float forward, float backward)
+        {
+            float span = forward + backward;
+            return forward < MaxPassageGap && backward < MaxPassageGap && span >= MinPassageGap && span <= MaxPassageGap;
+        }
+
         public static bool WillHitArenaBounds(float x, float y, float vx, float vy, float lookAhead)
         {
             float px = x + vx * lookAhead;
@@ -231,10 +245,109 @@ namespace RoundsBots.Logic
             return Math.Max(MinPreferredDistance, distance);
         }
 
+        /// <summary>
+        /// Куди йти, коли до цілі немає маршруту (гравець сховався): найдешевша досяжна клітинка, звідки ціль видно;
+        /// якщо такої немає — найближча до цілі по прямій. Повертає індекс у <paramref name="cells"/> або -1.
+        /// </summary>
+        public const float ApproachKeepDistance = 2f;
+
+        /// <summary>
+        /// Як <see cref="ChooseApproachCell(IReadOnlyList{ValueTuple{float, bool, float}})"/>, але тримаємося попередньої
+        /// клітинки, поки вона не гірша (гра 2026-11-25: вибір перескакував між двома місцями з кожним кроком — бот
+        /// ходив туди-сюди біля «пальця» на 04188f60).
+        /// </summary>
+        public static int ChooseApproachCell(IReadOnlyList<(float cost, bool canSee, float distanceToTarget)> cells, int previous)
+        {
+            int best = ChooseApproachCell(cells);
+            if (previous < 0 || previous >= cells.Count || best < 0 || previous == best)
+            {
+                return best;
+            }
+
+            bool keep = cells[best].canSee
+                ? cells[previous].canSee
+                : !cells[previous].canSee && cells[previous].distanceToTarget <= cells[best].distanceToTarget + ApproachKeepDistance;
+            return keep ? previous : best;
+        }
+
+        public static int ChooseApproachCell(IReadOnlyList<(float cost, bool canSee, float distanceToTarget)> cells)
+        {
+            int best = -1;
+            for (int i = 0; i < cells.Count; i++)
+            {
+                if (cells[i].canSee && (best < 0 || cells[i].cost < cells[best].cost))
+                {
+                    best = i;
+                }
+            }
+
+            if (best >= 0)
+            {
+                return best;
+            }
+
+            for (int i = 0; i < cells.Count; i++)
+            {
+                if (best < 0 || cells[i].distanceToTarget < cells[best].distanceToTarget)
+                {
+                    best = i;
+                }
+            }
+
+            return best;
+        }
+
+        /// <summary>Поверхня з такою нормаллю — стіна (крутіше ~45°), а не схил, по якому можна вибігти.</summary>
+        public static bool IsSteepWall(float normalX, float normalY)
+        {
+            float length = (float)Math.Sqrt(normalX * normalX + normalY * normalY);
+            return length > 0f && Math.Abs(normalX) / length > 0.72f;
+        }
+
+        /// <summary>Вікно гри для стрибка від стіни після зачіпу (PlayerJump: sinceWallGrab &lt; 0.1).</summary>
+        public const float WallJumpWindow = 0.08f;
+
+        /// <summary>
+        /// Лазіння по стіні: стрибок одразу після зачіпу; або подвійний на вершині польоту, поки нижче за край стіни.
+        /// Гра ігнорує стрибок раніше ніж через 0.1 с після попереднього.
+        /// </summary>
+        public static bool ClimbJump(float sinceWallGrab, float sinceJump, int currentJumps, float vy, float y, float ledgeY)
+        {
+            if (sinceJump < 0.12f || y >= ledgeY - 0.3f)
+            {
+                return false;
+            }
+
+            if (sinceWallGrab < WallJumpWindow)
+            {
+                return true;
+            }
+
+            return currentJumps > 0 && vy <= 0.5f && sinceJump > 0.3f;
+        }
+
+        /// <summary>Застряг: розвертатися, якщо це повтор, те саме місце (кут) або висимо в повітрі під виступом.</summary>
+        public static bool ShouldReverseWhenStuck(bool repeatedRecently, bool sameSpot, bool grounded)
+        {
+            return repeatedRecently || sameSpot || !grounded;
+        }
+
+        /// <summary>Скільки відходити після застрягання: щоразу в тому самому місці — довше (до 6 с).</summary>
+        public static float StuckReverseSeconds(float baseSeconds, int sameSpotCount)
+        {
+            return Math.Min(6f, baseSeconds + 1f * Math.Max(0, sameSpotCount));
+        }
+
         /// <summary>Штрафуємо перехід лише за справжнє падіння зі стрибка чи зіскоку (таймаут і ходьба — тільки в лог).</summary>
         public static bool ShouldPenalise(NavMove move, bool fell)
         {
             return fell && (move == NavMove.Jump || move == NavMove.Fall);
+        }
+
+        /// <summary>Стрибок/зіскок не вдався за час — легкий штраф (повторні спроби недосяжного стрибка накопичують його).</summary>
+        public static bool ShouldPenaliseTimeout(NavMove move, bool fell)
+        {
+            return !fell && (move == NavMove.Jump || move == NavMove.Fall);
         }
 
         /// <summary>Скільки секунд після відриву бот довіряє своєму стрибку через прірву.</summary>
