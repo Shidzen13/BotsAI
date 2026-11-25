@@ -88,6 +88,7 @@ namespace RoundsBots
             stuckTimer = 0f;
             attempt = null;       // смерть, пауза, вибір карток — незавершена спроба не рахується невдачею
             plannedStep = null;
+            BreakTarget = null;
             gapJumpDirection = 0;
         }
 
@@ -183,7 +184,7 @@ namespace RoundsBots
             }
         }
 
-        private const int VoidSearchRadius = 12;   // ШІ-чат (порожнеча, крок 2): шукаємо опору в межах ±12 од.
+        private const int VoidSearchRadius = 40;   // уся ширина арени (гра 2026-11-25, «рука»: вихід з тунелю над прірвою був за 25 од., бот шукав лише ±12 і загинув)
 
         /// <summary>Відскок від низу ще має сенс: уже відскочили, або блок готовий прийняти удар об межу.</summary>
         private bool BounceStillSafe =>
@@ -536,6 +537,11 @@ namespace RoundsBots
             NavGrid grid = NavMap.Get();
             (int cx, int cy) = NavMap.ToCell(myPosition);
             (int tx, int ty) = NavMap.ToCell(myPosition + toTarget);
+            if (TryLeaveRoof(grid, cx, cy, out horizontal))
+            {
+                return true;
+            }
+
             if (!TryFindStartCell(grid, cx, cy, out int sx, out int sy) || !grid.TryFindStandable(tx, ty, out int gx, out int gy))
             {
                 LastPathLength = -1; // у лозі: -1 — немає клітинки старту/цілі, 0 — немає маршруту
@@ -555,11 +561,18 @@ namespace RoundsBots
             LastPath = path;
             if (path.Count == 0)
             {
+                BreakTarget = null;
                 plannedStep = null;
                 return false;
             }
 
             NavStep next = path[0];
+            BreakTarget = null;
+            if (next.Move == NavMove.Break)
+            {
+                return BeginBreak(grid, sx, sy, next, out horizontal, out jump);
+            }
+
             if (next.Move == NavMove.Bounce)
             {
                 bounceColumn = grid.FindBounceColumn(sx, sy, next.X, next.Y);
@@ -586,6 +599,13 @@ namespace RoundsBots
             int stepDx = next.X - sx;
             horizontal = stepDx > 0 ? 1 : stepDx < 0 ? -1 : 0;
 
+            // Крок угору по ходьбі, а попереду крута стінка/сходинка — підстрибуємо (гра 2026-11-25, 3e40b284:
+            // бот упирався в сходинку на 1 клітинку, розвертався й ходив туди-сюди).
+            if (next.Move == NavMove.Walk && next.Y > sy && !airborne && horizontal != 0 && IsWallAhead(myPosition, horizontal))
+            {
+                jump = true;
+            }
+
             if (next.Move != NavMove.Walk)
             {
                 plannedStep = next;
@@ -594,6 +614,8 @@ namespace RoundsBots
                 // У повітрі стрибнути можна лише від стіни або подвійним стрибком.
                 if (next.Move == NavMove.Climb)
                 {
+                    bool hasWall = grid.TryGetClimbWall(sx, sy, next.X, out int column, out climbWallDirection);
+                    climbColumnX = hasWall ? NavMap.ToWorld(column, sy).x : (float?)null;
                     horizontal = WallSide(myPosition, horizontal);
                     jump = !airborne || data.isWallGrab;
                 }
@@ -612,6 +634,73 @@ namespace RoundsBots
             }
 
             return true;
+        }
+
+        /// <summary>Руйнівна клітинка, яку треба прострілити на маршруті (BotBrain стріляє, поки немає пострілу по ворогу).</summary>
+        public Vector2? BreakTarget { get; private set; }
+
+        private float? climbColumnX;
+        private int climbWallDirection;
+
+        private const float BreakGiveUpSeconds = 8f;
+        private (int fx, int fy, int tx, int ty) breakEdge = (-1, -1, -1, -1);
+        private float breakSince;
+
+        /// <summary>
+        /// Крок «пробити»: стоїмо на місці, BotBrain прострілює шар. Коли дірка з'явиться, сітка перебудується, і
+        /// маршрут піде звичайним стрибком/ходьбою. Не пробивається за <see cref="BreakGiveUpSeconds"/> — штраф переходу.
+        /// </summary>
+        private bool BeginBreak(NavGrid grid, int sx, int sy, NavStep next, out int horizontal, out bool jump)
+        {
+            horizontal = 0;
+            jump = false;
+            plannedStep = null;
+            var edge = (sx, sy, next.X, next.Y);
+            if (edge != breakEdge)
+            {
+                breakEdge = edge;
+                breakSince = Time.time;
+            }
+            else if (Time.time - breakSince > BreakGiveUpSeconds)
+            {
+                NavMap.ReportFailure(sx, sy, next.X, next.Y, "Break");
+                breakSince = Time.time;
+                return true;
+            }
+
+            if (grid.TryGetBreakCell(sx, sy, next.X, next.Y, out int bx, out int by))
+            {
+                BreakTarget = NavMap.ToWorld(bx, by);
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Бот на даху над сіткою (вище верхнього ряду, під ним тверде — гра 2026-11-25, bd7e42cf: стояв на верхній плиті
+        /// карти, а маршрут рахувався «під стелею» й ходив по колу): ідемо до найближчого краю даху й зістрибуємо.
+        /// </summary>
+        private bool TryLeaveRoof(NavGrid grid, int cx, int cy, out int horizontal)
+        {
+            horizontal = 0;
+            int top = grid.Height - 1;
+            if (cy < top || !grid.IsSolid(Mathf.Clamp(cx, 0, grid.Width - 1), top))
+            {
+                return false;
+            }
+
+            for (int distance = 1; distance < grid.Width; distance++)
+            {
+                bool left = cx - distance >= 0 && !grid.IsSolid(cx - distance, top);
+                bool right = cx + distance < grid.Width && !grid.IsSolid(cx + distance, top);
+                if (left || right)
+                {
+                    horizontal = right && (!left || lastHorizontal >= 0) ? 1 : -1;
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private const float NearestReachableBudget = 200f;
@@ -780,7 +869,16 @@ namespace RoundsBots
                 // коли вже вище — летимо на полицю.
                 if (myPosition.y < landing.y - 0.3f)
                 {
-                    horizontal = WallSide(myPosition, horizontal);
+                    int side = WallSide(myPosition, horizontal != 0 ? horizontal : climbWallDirection);
+                    if (!IsWallAhead(myPosition, side) && !data.isWallGrab && climbColumnX.HasValue)
+                    {
+                        // Стіни ще не видно (вона вище, навис, кут торта): спершу у свою колонку, далі тиснемо в бік стіни
+                        // зі сітки — так зачепимося, щойно дістанемо (гра 2026-11-25: бот стояв під полицею з dir=0).
+                        float toColumn = climbColumnX.Value - myPosition.x;
+                        side = Mathf.Abs(toColumn) > 0.45f ? (toColumn > 0f ? 1 : -1) : climbWallDirection;
+                    }
+
+                    horizontal = side;
                     jump = !airborne || data.isWallGrab;
                 }
 
@@ -798,8 +896,10 @@ namespace RoundsBots
                 return;
             }
 
-            // Поки летимо вгору нижче за платформу — не тиснемо вбік, якщо там стінка (інакше вріжемося в бік блоку).
-            if (myPosition.y < landing.y - 1f && horizontal != 0 && IsWallAhead(myPosition, horizontal))
+            // Поки летимо вгору (чи нижче за платформу) — не тиснемо в стінку попереду: спершу вище за неї, потім убік
+            // (гра 2026-11-25, свічка на торті: бот впирався в стінку й зачіплявся за неї замість перелетіти).
+            bool risingNow = data.playerVel != null && Velocity(data.playerVel).y > 0f;
+            if ((risingNow || myPosition.y < landing.y - 1f) && horizontal != 0 && IsWallAhead(myPosition, horizontal))
             {
                 horizontal = 0;
             }

@@ -268,6 +268,13 @@ namespace RoundsBots
             if (!IsDisabled(BotExperiment.NoBreakObstacles))
             {
                 HandleObstacleAhead(myPosition, horizontal, canShoot: !aiming.HasClearShot && reload <= 0f);
+
+                // Маршрут іде крізь коробки — прострілюємо їх (стеля над головою чи стінка поруч).
+                if (navigation.BreakTarget is Vector2 breakAt && !aiming.HasClearShot && reload <= 0f)
+                {
+                    aimDirection = (breakAt - myPosition).normalized;
+                    shooting = true;
+                }
             }
 
             UpdateBlock(myPosition, settings);

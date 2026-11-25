@@ -235,6 +235,7 @@ namespace RoundsBots
             var marks = new char[Width, Height];
             bool movablesFound = false;
             int openedGaps = 0;
+            var gapCandidate = new bool[Width, Height];
             for (int x = 0; x < Width; x++)
             {
                 for (int y = 0; y < Height; y++)
@@ -242,14 +243,33 @@ namespace RoundsBots
                     Vector2 center = ToWorld(x, y);
                     bool hazard = HazardCache.IsDangerous(center, -1f);
                     solid[x, y] = IsSolidAt(center, mask, out bool breakable, out bool movable) || hazard;
-                    if (solid[x, y] && !hazard && !breakable && !movable && IsNarrowPassage(center, mask))
-                    {
-                        solid[x, y] = false; // щілина ≥1,2 між двома стінами — клітинка «тверда» лише через їхні краї
-                        openedGaps++;
-                    }
+                    gapCandidate[x, y] = solid[x, y] && !hazard && !breakable && !movable;
 
                     marks[x, y] = hazard ? 'S' : breakable ? 'D' : movable ? 'M' : ' ';
                     movablesFound |= movable || breakable;
+                }
+            }
+
+            // Друга прохідка: відкриваємо щілину лише між суцільним з обох боків по її осі (гра 2026-11-25: тонкий
+            // похилий дах над балкою «відкрився» як щілина — бот планував падати крізь дах).
+            var original = (bool[,])solid.Clone();
+            for (int x = 1; x < Width - 1; x++)
+            {
+                for (int y = 1; y < Height - 1; y++)
+                {
+                    if (!gapCandidate[x, y])
+                    {
+                        continue;
+                    }
+
+                    Vector2 center = ToWorld(x, y);
+                    bool hole = original[x - 1, y] && original[x + 1, y] && IsNarrowPassage(center, mask, Vector2.right);
+                    bool door = original[x, y - 1] && original[x, y + 1] && IsNarrowPassage(center, mask, Vector2.up);
+                    if (hole || door)
+                    {
+                        solid[x, y] = false;
+                        openedGaps++;
+                    }
                 }
             }
 
@@ -260,7 +280,20 @@ namespace RoundsBots
             }
 
             hasMovingParts = HasMovingParts();
-            var built = new NavGrid(solid, PlayerClearance, MinBotJumps());
+            bool[,] breakables = null;
+            if (movablesFound)
+            {
+                breakables = new bool[Width, Height];
+                for (int x = 0; x < Width; x++)
+                {
+                    for (int y = 0; y < Height; y++)
+                    {
+                        breakables[x, y] = solid[x, y] && marks[x, y] == 'D';
+                    }
+                }
+            }
+
+            var built = new NavGrid(solid, PlayerClearance, MinBotJumps(), breakables);
             ApplyLearned(built);
             MapWrapper map = MapManager.instance != null ? MapManager.instance.currentMap : null;
             if (!ReferenceEquals(map, dumpedFor))
@@ -338,15 +371,14 @@ namespace RoundsBots
         /// всіх картах). Центр клітинки вільний, а вздовж осі вільний проміжок між двома стінами завширшки
         /// <see cref="BotMath.MinPassageGap"/>..<see cref="BotMath.MaxPassageGap"/> — гравець проходить.
         /// </summary>
-        private static bool IsNarrowPassage(Vector2 center, LayerMask mask)
+        private static bool IsNarrowPassage(Vector2 center, LayerMask mask, Vector2 axis)
         {
             if (IsSolidAt(center, mask, out _, out _, PointProbe))
             {
                 return false;
             }
 
-            return BotMath.IsPassageGap(FreeDistance(center, Vector2.right, mask), FreeDistance(center, Vector2.left, mask))
-                || BotMath.IsPassageGap(FreeDistance(center, Vector2.up, mask), FreeDistance(center, Vector2.down, mask));
+            return BotMath.IsPassageGap(FreeDistance(center, axis, mask), FreeDistance(center, -axis, mask));
         }
 
         private static float FreeDistance(Vector2 from, Vector2 direction, LayerMask mask)

@@ -105,7 +105,10 @@ namespace RoundsBots.Logic
                 return false;
             }
 
-            return y + vy * vy / (2f * gravity) >= ArenaHalfHeight - margin;
+            // Опір гасить швидкість після поштовху — без стелі оцінки бот вважав, що злетить на ~30 од., і відпускав стрибок
+            // одразу (гра 2026-11-25: стрибок бота ≤4,6 од. проти 8 у людини). Вище за повний стрибок не злетимо.
+            float rise = Math.Min(vy * vy / (2f * gravity), JumpApexEstimate);
+            return y + rise >= ArenaHalfHeight - margin;
         }
 
         /// <summary>

@@ -20,23 +20,25 @@ public sealed class RealMapTests
 
     internal static NavGrid Load(string file, int clearance = 2) => LoadWith(file, clearance, 1);
 
-    internal static NavGrid LoadWith(string file, int clearance, int jumps)
+    internal static NavGrid LoadWith(string file, int clearance, int jumps, bool breakables = false, Func<int, int, bool> removed = null)
     {
         string[] lines = File.ReadAllLines(Path.Combine(AppContext.BaseDirectory, "Maps", file));
         int width = lines.Where(l => !l.Contains('=') && !l.StartsWith("legend")).Select(l => l.Length).DefaultIfEmpty(72).Max();
         string[] rows = lines.Where(l => l.Length == width && !l.Contains('=')).ToArray(); // ширина з 0.5.5 — за межами карти
         int height = rows.Length;
         var solid = new bool[width, height];
+        var breakable = new bool[width, height];
         for (int row = 0; row < height; row++)
         {
             for (int x = 0; x < width; x++)
             {
                 char c = rows[row][x];
-                solid[x, height - 1 - row] = c == '#' || c == 'D' || c == 'S';
+                solid[x, height - 1 - row] = (c == '#' || c == 'D' || c == 'S') && !(removed != null && removed(x, height - 1 - row));
+                breakable[x, height - 1 - row] = c == 'D';
             }
         }
 
-        return new NavGrid(solid, clearance, jumps);
+        return new NavGrid(solid, clearance, jumps, breakables ? breakable : null);
     }
 
     [Theory]
